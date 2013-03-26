@@ -52,11 +52,44 @@ public class MainPanel extends JFrame {
 		JMenuItem mntmNewMenuItem = new JMenuItem("Add Borrower");
 		mnClerk.add(mntmNewMenuItem);
 		
+		JMenuItem mntmCheckOutItems = new JMenuItem("Check out items");
+		mnClerk.add(mntmCheckOutItems);
+		
+		JMenuItem mntmProcessAReturn = new JMenuItem("Process a return");
+		mnClerk.add(mntmProcessAReturn);
+		
+		JMenuItem mntmCheckOverdueItems = new JMenuItem("Check overdue items");
+		mnClerk.add(mntmCheckOverdueItems);
+		
 		JMenu mnBorrower = new JMenu("Borrower");
 		menuBar.add(mnBorrower);
 		
+		JMenuItem mntmSearch = new JMenuItem("Search");
+		mnBorrower.add(mntmSearch);
+		
+		JMenuItem mntmCheckAccount = new JMenuItem("Check account");
+		mnBorrower.add(mntmCheckAccount);
+		
+		JMenuItem mntmPlaceAHold = new JMenuItem("Place a hold");
+		mnBorrower.add(mntmPlaceAHold);
+		
+		JMenuItem mntmPayAFine = new JMenuItem("Pay a fine");
+		mnBorrower.add(mntmPayAFine);
+		
 		JMenu mnLibrarian = new JMenu("Librarian");
 		menuBar.add(mnLibrarian);
+		
+		JMenuItem mntmAddABook = new JMenuItem("Add a book");
+		mnLibrarian.add(mntmAddABook);
+		
+		JMenuItem mntmAddACopy = new JMenuItem("Add a copy");
+		mnLibrarian.add(mntmAddACopy);
+		
+		JMenuItem mntmReportBooks = new JMenuItem("Report books");
+		mnLibrarian.add(mntmReportBooks);
+		
+		JMenuItem mntmPopularItems = new JMenuItem("Popular items");
+		mnLibrarian.add(mntmPopularItems);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 150, 150));
 		setContentPane(contentPane);
