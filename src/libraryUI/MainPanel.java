@@ -14,10 +14,23 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JLabel;
+import com.jgoodies.forms.factories.DefaultComponentFactory;
+import java.awt.Font;
+import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import library.Library;
+import library.Library.BORROWER_ACTIONS;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 
 public class MainPanel extends JFrame {
 
 	private JPanel contentPane;
+	private JTextField searchField;
+	private JComboBox comboBox;
 
 	/**
 	 * Launch the application.
@@ -41,7 +54,7 @@ public class MainPanel extends JFrame {
 	 */
 	public MainPanel() throws IOException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 499, 355);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -65,6 +78,12 @@ public class MainPanel extends JFrame {
 		menuBar.add(mnBorrower);
 		
 		JMenuItem mntmSearch = new JMenuItem("Search");
+//		mntmSearch.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent arg0) {
+//				Library lib = new Library();
+//				lib.borrowerActions(BORROWER_ACTIONS.SEARCH_BOOKS);
+//			}
+//		});
 		mnBorrower.add(mntmSearch);
 		
 		JMenuItem mntmCheckAccount = new JMenuItem("Check account");
@@ -95,8 +114,54 @@ public class MainPanel extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		final JLabel lblWelcome = DefaultComponentFactory.getInstance().createTitle("WELCOME");
+		lblWelcome.setForeground(Color.WHITE);
+		lblWelcome.setFont(new Font("Arial", Font.BOLD, 63));
+		lblWelcome.setBounds(84, 86, 397, 110);
+		contentPane.add(lblWelcome);
+		
+		searchField = new JTextField();
+		searchField.setBounds(104, 20, 269, 28);
+		contentPane.add(searchField);
+		searchField.setColumns(10);
+		searchField.setVisible(false);
+		
+		final JButton btnSearch = new JButton("Search");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Library lib = new Library();
+				String dropDownItem = (String)comboBox.getSelectedItem();
+				String searchInputText = searchField.getText();
+				lib.borrowerActions(BORROWER_ACTIONS.SEARCH_BOOKS, searchInputText, dropDownItem);
+				
+			}
+		});
+		
+		btnSearch.setBounds(374, 21, 117, 29);
+		contentPane.add(btnSearch);
+		
+		comboBox = new JComboBox();
+		comboBox.addItem("Title");
+		comboBox.addItem("Author");
+		comboBox.addItem("Subject");
+		comboBox.getItemAt(0);
+		comboBox.setBounds(6, 22, 96, 27);
+		contentPane.add(comboBox);
+		comboBox.setVisible(false);
+		
 		JLabel lblNewLabel = new JLabel(new ImageIcon(ImageIO.read(new File("Images/library1.jpg"))));
-		lblNewLabel.setBounds(0, 0, 450, 256);
+		lblNewLabel.setBounds(-2, -9, 502, 350);
 		contentPane.add(lblNewLabel);
+		btnSearch.setVisible(false);
+		
+		mntmSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				lblWelcome.setVisible(false);
+				searchField.setVisible(true);
+				btnSearch.setVisible(true);
+				comboBox.setVisible(true);
+				
+			}
+		});
 	}
 }

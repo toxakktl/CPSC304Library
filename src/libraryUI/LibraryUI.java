@@ -81,11 +81,11 @@ public class LibraryUI extends JFrame {
 			btnLogin.setBounds(182, 223, 117, 29);
 			contentPane.add(btnLogin);
 			
-			passwordField = new JPasswordField();
+			passwordField = new JPasswordField("a59227108");
 			passwordField.setBounds(163, 172, 154, 39);
 			contentPane.add(passwordField);
 			
-			textField = new JTextField();
+			textField = new JTextField("ora_p4u7");
 			textField.setBounds(163, 104, 154, 41);
 			contentPane.add(textField);
 			textField.setColumns(10);

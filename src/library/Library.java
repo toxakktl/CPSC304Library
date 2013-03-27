@@ -138,25 +138,65 @@ public class Library implements ActionListener {
 		}
 	}
 	
-	private enum BORROWER_ACTIONS {
+	public enum BORROWER_ACTIONS {
 		SEARCH_BOOKS, CHECK_ACCOUNT, PLACE_HOLD, PAY_FINE;
 	}
 	
-	private void borrowerActions(BORROWER_ACTIONS ba) {
+	public void borrowerActions(BORROWER_ACTIONS ba, String searchField, String dropdown) {
+		//Table fields
+		String title_id;
+		String title;
+		String type;
+		String pub_id;
+		int price;
+		String advance;
+		int ytd_sales;
+		String contract; 
+		String notes;
+		String pubdate;
+		Statement stm;
+		
 		try {
 			PreparedStatement ps = null;
 			switch (ba) {
 			case SEARCH_BOOKS:
-				
+
+				System.out.println(searchField);
+	//			try{
+	//			stm = con.createStatement();
+				if (dropdown.equals("Title")){
+					System.out.println("Title Item was selected from DropDown list");
+//					ResultSet resultSearch = stm.executeQuery("SELECT * FROM titles WHERE title = " + searchField );
+//					ResultSetMetaData rsmd = resultSearch.getMetaData();
+//
+//					// get number of columns
+//					int numCols = rsmd.getColumnCount();
+//					for (int i = 0; i < numCols; i++) {
+//						// get column name and print it
+//
+//						System.out.printf("%-15s", rsmd.getColumnName(i + 1));
+//					}
+//					
+//					stm.close();
+					
+					
+				}else if (dropdown.equals("Author")){
+					System.out.println("Author Item was selected from DropDown list");
+				}else
+					System.out.println("Subject Item was selected from DropDown list");
+				//}catch (SQLException ex){
+					//System.out.println("The SQL Exception has occured:" + ex);
+				//}
 				break;
 			case CHECK_ACCOUNT:
-				
+				//TODO Tokhtar
 				break;
 			case PLACE_HOLD:
 				ps = con.prepareStatement("");
+				//TODO Tokhtar 
 				break;
 			case PAY_FINE:
-				
+				//TODO Tokhtar
 				break;
 			}
 			if (ps != null) {
@@ -217,92 +257,92 @@ public class Library implements ActionListener {
 	 * constructs login window and loads JDBC driver
 	 */
 	public Library() {
-		mainFrame = new JFrame("User Login");
-
-		JLabel usernameLabel = new JLabel("Enter username: ");
-		JLabel passwordLabel = new JLabel("Enter password: ");
-
-		usernameField = new JTextField(10);
-		passwordField = new JPasswordField(10);
-		passwordField.setEchoChar('*');
-
-		JButton loginButton = new JButton("Log In");
-
-		JPanel contentPane = new JPanel();
-		mainFrame.setContentPane(contentPane);
-
-		// layout components using the GridBag layout manager
-
-		GridBagLayout gb = new GridBagLayout();
-		GridBagConstraints c = new GridBagConstraints();
-
-		contentPane.setLayout(gb);
-		contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-		// place the username label
-		c.gridwidth = GridBagConstraints.RELATIVE;
-		c.insets = new Insets(10, 10, 5, 0);
-		gb.setConstraints(usernameLabel, c);
-		contentPane.add(usernameLabel);
-
-		// place the text field for the username
-		c.gridwidth = GridBagConstraints.REMAINDER;
-		c.insets = new Insets(10, 0, 5, 10);
-		gb.setConstraints(usernameField, c);
-		contentPane.add(usernameField);
-
-		// place password label
-		c.gridwidth = GridBagConstraints.RELATIVE;
-		c.insets = new Insets(0, 10, 10, 0);
-		gb.setConstraints(passwordLabel, c);
-		contentPane.add(passwordLabel);
-
-		// place the password field
-		c.gridwidth = GridBagConstraints.REMAINDER;
-		c.insets = new Insets(0, 0, 10, 10);
-		gb.setConstraints(passwordField, c);
-		contentPane.add(passwordField);
-
-		// place the login button
-		c.gridwidth = GridBagConstraints.REMAINDER;
-		c.insets = new Insets(5, 10, 10, 10);
-		c.anchor = GridBagConstraints.CENTER;
-		gb.setConstraints(loginButton, c);
-		contentPane.add(loginButton);
-
-		// register password field and OK button with action event handler
-		passwordField.addActionListener(this);
-		loginButton.addActionListener(this);
-
-		// anonymous inner class for closing the window
-		mainFrame.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				System.exit(0);
-			}
-		});
-
-		// size the window to obtain a best fit for the components
-		mainFrame.pack();
-
-		// center the frame
-		Dimension d = mainFrame.getToolkit().getScreenSize();
-		Rectangle r = mainFrame.getBounds();
-		mainFrame.setLocation((d.width - r.width) / 2,
-				(d.height - r.height) / 2);
-
-		// make the window visible
-		mainFrame.setVisible(true);
-
-		// place the cursor in the text field for the username
-		usernameField.requestFocus();
-
-		try {
-			// Load the Oracle JDBC driver
-			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-		} catch (SQLException ex) {
-			System.out.println("Message: " + ex.getMessage());
-			System.exit(-1);
-		}
+//		mainFrame = new JFrame("User Login");
+//
+//		JLabel usernameLabel = new JLabel("Enter username: ");
+//		JLabel passwordLabel = new JLabel("Enter password: ");
+//
+//		usernameField = new JTextField(10);
+//		passwordField = new JPasswordField(10);
+//		passwordField.setEchoChar('*');
+//
+//		JButton loginButton = new JButton("Log In");
+//
+//		JPanel contentPane = new JPanel();
+//		mainFrame.setContentPane(contentPane);
+//
+//		// layout components using the GridBag layout manager
+//
+//		GridBagLayout gb = new GridBagLayout();
+//		GridBagConstraints c = new GridBagConstraints();
+//
+//		contentPane.setLayout(gb);
+//		contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+//
+//		// place the username label
+//		c.gridwidth = GridBagConstraints.RELATIVE;
+//		c.insets = new Insets(10, 10, 5, 0);
+//		gb.setConstraints(usernameLabel, c);
+//		contentPane.add(usernameLabel);
+//
+//		// place the text field for the username
+//		c.gridwidth = GridBagConstraints.REMAINDER;
+//		c.insets = new Insets(10, 0, 5, 10);
+//		gb.setConstraints(usernameField, c);
+//		contentPane.add(usernameField);
+//
+//		// place password label
+//		c.gridwidth = GridBagConstraints.RELATIVE;
+//		c.insets = new Insets(0, 10, 10, 0);
+//		gb.setConstraints(passwordLabel, c);
+//		contentPane.add(passwordLabel);
+//
+//		// place the password field
+//		c.gridwidth = GridBagConstraints.REMAINDER;
+//		c.insets = new Insets(0, 0, 10, 10);
+//		gb.setConstraints(passwordField, c);
+//		contentPane.add(passwordField);
+//
+//		// place the login button
+//		c.gridwidth = GridBagConstraints.REMAINDER;
+//		c.insets = new Insets(5, 10, 10, 10);
+//		c.anchor = GridBagConstraints.CENTER;
+//		gb.setConstraints(loginButton, c);
+//		contentPane.add(loginButton);
+//
+//		// register password field and OK button with action event handler
+//		passwordField.addActionListener(this);
+//		loginButton.addActionListener(this);
+//
+//		// anonymous inner class for closing the window
+//		mainFrame.addWindowListener(new WindowAdapter() {
+//			public void windowClosing(WindowEvent e) {
+//				System.exit(0);
+//			}
+//		});
+//
+//		// size the window to obtain a best fit for the components
+//		mainFrame.pack();
+//
+//		// center the frame
+//		Dimension d = mainFrame.getToolkit().getScreenSize();
+//		Rectangle r = mainFrame.getBounds();
+//		mainFrame.setLocation((d.width - r.width) / 2,
+//				(d.height - r.height) / 2);
+//
+//		// make the window visible
+//		mainFrame.setVisible(true);
+//
+//		// place the cursor in the text field for the username
+//		usernameField.requestFocus();
+//
+//		try {
+//			// Load the Oracle JDBC driver
+//			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+//		} catch (SQLException ex) {
+//			System.out.println("Message: " + ex.getMessage());
+//			System.exit(-1);
+//		}
 	}
 
 	/*
