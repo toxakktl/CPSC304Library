@@ -2,6 +2,7 @@ package library;
 
 //We need to import the java.sql package to use JDBC
 import java.sql.*;
+import java.util.Vector;
 
 //for reading from the command line
 import java.io.*;
@@ -31,6 +32,9 @@ public class Library implements ActionListener {
 	private JTextField usernameField;
 	private JPasswordField passwordField;
 	private JFrame mainFrame;
+	
+	Vector columnNames = new Vector();
+	
 
 	private enum CLERK_ACTIONS {
 		ADD_BORROWER, CHECK_OUT, CHECK_IN, CHECK_IN_OVERDUE;
@@ -162,31 +166,61 @@ public class Library implements ActionListener {
 			case SEARCH_BOOKS:
 
 				System.out.println(searchField);
-	//			try{
-	//			stm = con.createStatement();
+				try{
+				stm = con.createStatement();
 				if (dropdown.equals("Title")){
 					System.out.println("Title Item was selected from DropDown list");
-//					ResultSet resultSearch = stm.executeQuery("SELECT * FROM titles WHERE title = " + searchField );
-//					ResultSetMetaData rsmd = resultSearch.getMetaData();
+					ResultSet resultSearch = stm.executeQuery("SELECT * FROM titles WHERE title = '" + searchField + "'");
+					ResultSetMetaData rsmd = resultSearch.getMetaData();
+					//System.out.println("does it get here?");
+					 //get number of columns
+					int numCols = rsmd.getColumnCount();
+					for (int i = 0; i < numCols; i++) {
+						// get column name and print it
+						columnNames.addElement(rsmd.getColumnName(i+1));
+						System.out.printf("%-15s", rsmd.getColumnName(i + 1));
+					}
+					
+					while (resultSearch.next()) {
+						// for display purposes get everything from Oracle
+						// as a string
+
+						// simplified output formatting; truncation may occur
+
+						title_id = resultSearch.getString("title_id");
+						System.out.printf("\n%-10.10s", title_id);
+
+//						bname = rs.getString("branch_name");
+//						System.out.printf("%-20.20s", bname);
 //
-//					// get number of columns
-//					int numCols = rsmd.getColumnCount();
-//					for (int i = 0; i < numCols; i++) {
-//						// get column name and print it
+//						baddr = rs.getString("branch_addr");
+//						if (rs.wasNull()) {
+//							System.out.printf("%-20.20s", " ");
+//						} else {
+//							System.out.printf("%-20.20s", baddr);
+//						}
 //
-//						System.out.printf("%-15s", rsmd.getColumnName(i + 1));
-//					}
-//					
-//					stm.close();
+//						bcity = rs.getString("branch_city");
+//						System.out.printf("%-15.15s", bcity);
+//
+//						bphone = rs.getString("branch_phone");
+//						if (rs.wasNull()) {
+//							System.out.printf("%-15.15s\n", " ");
+//						} else {
+//							System.out.printf("%-15.15s\n", bphone);
+//						}
+					}
+					
+					stm.close();
 					
 					
 				}else if (dropdown.equals("Author")){
 					System.out.println("Author Item was selected from DropDown list");
 				}else
 					System.out.println("Subject Item was selected from DropDown list");
-				//}catch (SQLException ex){
-					//System.out.println("The SQL Exception has occured:" + ex);
-				//}
+				}catch (SQLException ex){
+					System.out.println("The SQL Exception has occured:" + ex);
+				}
 				break;
 			case CHECK_ACCOUNT:
 				//TODO Tokhtar
@@ -256,93 +290,8 @@ public class Library implements ActionListener {
 	/*
 	 * constructs login window and loads JDBC driver
 	 */
-	public Library() {
-//		mainFrame = new JFrame("User Login");
-//
-//		JLabel usernameLabel = new JLabel("Enter username: ");
-//		JLabel passwordLabel = new JLabel("Enter password: ");
-//
-//		usernameField = new JTextField(10);
-//		passwordField = new JPasswordField(10);
-//		passwordField.setEchoChar('*');
-//
-//		JButton loginButton = new JButton("Log In");
-//
-//		JPanel contentPane = new JPanel();
-//		mainFrame.setContentPane(contentPane);
-//
-//		// layout components using the GridBag layout manager
-//
-//		GridBagLayout gb = new GridBagLayout();
-//		GridBagConstraints c = new GridBagConstraints();
-//
-//		contentPane.setLayout(gb);
-//		contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-//
-//		// place the username label
-//		c.gridwidth = GridBagConstraints.RELATIVE;
-//		c.insets = new Insets(10, 10, 5, 0);
-//		gb.setConstraints(usernameLabel, c);
-//		contentPane.add(usernameLabel);
-//
-//		// place the text field for the username
-//		c.gridwidth = GridBagConstraints.REMAINDER;
-//		c.insets = new Insets(10, 0, 5, 10);
-//		gb.setConstraints(usernameField, c);
-//		contentPane.add(usernameField);
-//
-//		// place password label
-//		c.gridwidth = GridBagConstraints.RELATIVE;
-//		c.insets = new Insets(0, 10, 10, 0);
-//		gb.setConstraints(passwordLabel, c);
-//		contentPane.add(passwordLabel);
-//
-//		// place the password field
-//		c.gridwidth = GridBagConstraints.REMAINDER;
-//		c.insets = new Insets(0, 0, 10, 10);
-//		gb.setConstraints(passwordField, c);
-//		contentPane.add(passwordField);
-//
-//		// place the login button
-//		c.gridwidth = GridBagConstraints.REMAINDER;
-//		c.insets = new Insets(5, 10, 10, 10);
-//		c.anchor = GridBagConstraints.CENTER;
-//		gb.setConstraints(loginButton, c);
-//		contentPane.add(loginButton);
-//
-//		// register password field and OK button with action event handler
-//		passwordField.addActionListener(this);
-//		loginButton.addActionListener(this);
-//
-//		// anonymous inner class for closing the window
-//		mainFrame.addWindowListener(new WindowAdapter() {
-//			public void windowClosing(WindowEvent e) {
-//				System.exit(0);
-//			}
-//		});
-//
-//		// size the window to obtain a best fit for the components
-//		mainFrame.pack();
-//
-//		// center the frame
-//		Dimension d = mainFrame.getToolkit().getScreenSize();
-//		Rectangle r = mainFrame.getBounds();
-//		mainFrame.setLocation((d.width - r.width) / 2,
-//				(d.height - r.height) / 2);
-//
-//		// make the window visible
-//		mainFrame.setVisible(true);
-//
-//		// place the cursor in the text field for the username
-//		usernameField.requestFocus();
-//
-//		try {
-//			// Load the Oracle JDBC driver
-//			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-//		} catch (SQLException ex) {
-//			System.out.println("Message: " + ex.getMessage());
-//			System.exit(-1);
-//		}
+	public Library(Connection connect) {
+		con = connect;
 	}
 
 	/*
@@ -693,8 +642,6 @@ public class Library implements ActionListener {
 		}
 	}
 
-	public static void main(String args[]) {
-		Library b = new Library();
-	}
+
 }
 

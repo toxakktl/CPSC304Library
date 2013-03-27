@@ -145,7 +145,7 @@ public class LibraryUI extends JFrame {
 		if (connectToDb(username, password)){
 			System.out.println("Success");
 			this.dispose();
-			MainPanel mp = new MainPanel();
+			MainPanel mp = new MainPanel(connection);
 			mp.setVisible(true);
 			//showMainPanel();
 		}else{

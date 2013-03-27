@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -31,28 +32,30 @@ public class MainPanel extends JFrame {
 	private JPanel contentPane;
 	private JTextField searchField;
 	private JComboBox comboBox;
+	Connection con;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainPanel frame = new MainPanel();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					MainPanel frame = new MainPanel();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
 	 * @throws IOException 
 	 */
-	public MainPanel() throws IOException {
+	public MainPanel(final Connection con) throws IOException {
+		this.con = con;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 499, 355);
 		
@@ -129,7 +132,7 @@ public class MainPanel extends JFrame {
 		final JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Library lib = new Library();
+				Library lib = new Library(con);
 				String dropDownItem = (String)comboBox.getSelectedItem();
 				String searchInputText = searchField.getText();
 				lib.borrowerActions(BORROWER_ACTIONS.SEARCH_BOOKS, searchInputText, dropDownItem);
