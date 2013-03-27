@@ -128,6 +128,7 @@ public class MainPanel extends JFrame {
 		contentPane.add(searchField);
 		searchField.setColumns(10);
 		searchField.setVisible(false);
+	
 		
 		final JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
@@ -150,6 +151,9 @@ public class MainPanel extends JFrame {
 		comboBox.getItemAt(0);
 		comboBox.setBounds(6, 22, 96, 27);
 		contentPane.add(comboBox);
+		
+		
+		
 		comboBox.setVisible(false);
 		
 		JLabel lblNewLabel = new JLabel(new ImageIcon(ImageIO.read(new File("Images/library1.jpg"))));

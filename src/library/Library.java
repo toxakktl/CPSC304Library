@@ -9,6 +9,8 @@ import java.io.*;
 
 //for the login window
 import javax.swing.*;
+import javax.swing.table.TableColumn;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -34,7 +36,8 @@ public class Library implements ActionListener {
 	private JFrame mainFrame;
 	
 	Vector columnNames = new Vector();
-	
+	Vector data = new Vector();
+	JPanel panel = new JPanel();
 
 	private enum CLERK_ACTIONS {
 		ADD_BORROWER, CHECK_OUT, CHECK_IN, CHECK_IN_OVERDUE;
@@ -182,13 +185,19 @@ public class Library implements ActionListener {
 					}
 					
 					while (resultSearch.next()) {
+						Vector row = new Vector(numCols);
+						  for (int i = 1; i <= numCols; i++) {
+			                    row.addElement(resultSearch.getObject(i));
+			                }
+						  data.addElement(row);
+						  
 						// for display purposes get everything from Oracle
 						// as a string
 
 						// simplified output formatting; truncation may occur
 
-						title_id = resultSearch.getString("title_id");
-						System.out.printf("\n%-10.10s", title_id);
+//						title_id = resultSearch.getString("title_id");
+//						System.out.printf("\n%-10.10s", title_id);
 
 //						bname = rs.getString("branch_name");
 //						System.out.printf("%-20.20s", bname);
@@ -211,9 +220,21 @@ public class Library implements ActionListener {
 //						}
 					}
 					
+					
+					resultSearch.close();
 					stm.close();
-					
-					
+					JTable table = new JTable(data, columnNames);
+			        TableColumn column;
+			        for (int i = 0; i < table.getColumnCount(); i++) {
+			            column = table.getColumnModel().getColumn(i);
+			            column.setMaxWidth(250);
+			        }
+			        JScrollPane scrollPane = new JScrollPane(table);
+			        panel.add(scrollPane);               
+			        JFrame frame = new JFrame();
+			        frame.add(panel);         //adding panel to the frame
+			        frame.setSize(600, 400); //setting frame size
+			        frame.setVisible(true);
 				}else if (dropdown.equals("Author")){
 					System.out.println("Author Item was selected from DropDown list");
 				}else
@@ -291,6 +312,7 @@ public class Library implements ActionListener {
 	 * constructs login window and loads JDBC driver
 	 */
 	public Library(Connection connect) {
+		//panel = jp;
 		con = connect;
 	}
 
