@@ -58,7 +58,7 @@ public class ClerkActions extends UserActions {
 					// the book is on hold; check that the person who is borrowing has placed a hold on the book
 					Statement holdSearch = con.createStatement();
 					ResultSet holdResult = holdSearch.executeQuery("SELECT bid FROM HoldRequest WHERE callNumber = '" + callNumber + "' AND bid = " + bid);
-					if (holdResult.getString("bid") != null) {
+					if (holdResult.next()) {
 						// the person has placed a hold on this book
 						copyNo = statusResult.getString("copyNo");
 					} else {
