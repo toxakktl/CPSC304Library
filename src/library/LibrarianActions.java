@@ -53,7 +53,7 @@ public class LibrarianActions extends UserActions {
 			}
 		}
 	}
-	
+
 	// 	Add a new copy of an existing book to the library
 	//			INSERT INTO BookCopy (callNumber, copyNo, status)
 	//				VALUES(1, 2, 3);
@@ -89,12 +89,88 @@ public class LibrarianActions extends UserActions {
 		}
 
 	}
+	
+	//	Generate report with all books that have been checked out
+	//	shows also dates checked out and due dates
+	//	flags overdue items << In java code?
+	//			SELECT *
+	//			FROM BookCopy JOIN Borrowing
+	//			ON (BookCopy.callNumber = Borrowing.callNumber) AND (BookCopy.copyNo = Borrowing.copyNo)
+	//			WHERE BookCopy.status LIKE 'OUT'
 	public void generateCheckedOutReport() {
+		PreparedStatement ps = null;
+		try{
+			ps = con.prepareStatement("SELECT * " +
+					"FROM BookCopy JOIN Borrowing " +
+					"ON (BookCopy.callNumber = Borrowing.callNumber) " +
+					"AND (BookCopy.copyNo = Borrowing.copyNo) " +
+					"WHERE BookCopy.status LIKE 'OUT'");
+			
+			// THIS SQL QUERY MUST BE TESTED FIRST TODO
 
+			// update the database
+			ps.executeUpdate();
+			// commit work
+			con.commit();
+			ps.close();
+
+		} catch (SQLException ex) {
+			System.out.println("Message: " + ex.getMessage());
+			try {
+				// undo the insert
+				con.rollback();
+			} catch (SQLException ex2) {
+				System.out.println("Message: " + ex2.getMessage());
+				System.exit(-1);
+			}
+		}
 	}
 
-	public void generateMostPopularReport() {
+	//	Generate report with "N" most popular items for a given year
+	//	n = top N, y = year
+	//			SELECT *
+	//			FROM
+	//				(SELECT id, count(id) as count
+	//				FROM
+	//					(SELECT *
+	//					FROM Borrowing
+	//					WHERE outdate LIKE [Y] + '%')
+	//				GROUP BY id)
+	//			WHERE rownum <= [N]
+	//			ORDER BY count DESC;
+	public void generateMostPopularReport(int n, int y) {
+		PreparedStatement ps = null;
+		try{
+			ps = con.prepareStatement("SELECT * FROM " +
+					"(SELECT bid, count(bid) as count FROM " +
+					"(SELECT * FROM Borrowing WHERE outdate LIKE '?%') " +
+					"GROUP BY bid) " +
+					"WHERE rownum <= ? " +
+					"ORDER BY count DESC");
+
+			// TODO THIS SQL QUERY ONLY RETURNS BID AND COUNT OF BID! -- at least it should
+
+			ps.setInt(1, y);
+			ps.setInt(2, 2);
+
+			// update the database
+			ps.executeUpdate();
+			// commit work
+			con.commit();
+			ps.close();
+
+		} catch (SQLException ex) {
+			System.out.println("Message: " + ex.getMessage());
+			try {
+				// undo the insert
+				con.rollback();
+			} catch (SQLException ex2) {
+				System.out.println("Message: " + ex2.getMessage());
+				System.exit(-1);
+			}
+		}
 
 	}
-
 }
+
+
