@@ -136,10 +136,22 @@ public class MainPanel extends JFrame {
 		JMenuItem mntmAddACopy = new JMenuItem("Add a copy");
 		mnLibrarian.add(mntmAddACopy);
 
-		JMenuItem mntmReportBooks = new JMenuItem("Report books");
+		JMenuItem mntmReportBooks = new JMenuItem("Report checked out");
+		mntmReportBooks.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				LibrarianActions la = new LibrarianActions(con);
+				la.generateCheckedOutReport();
+			}
+		});
 		mnLibrarian.add(mntmReportBooks);
 
 		JMenuItem mntmPopularItems = new JMenuItem("Popular items");
+		mntmPopularItems.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				LibrarianActions la = new LibrarianActions(con);
+				// la.generateMostPopularReport(n, y)
+			}
+		});
 		mnLibrarian.add(mntmPopularItems);
 
 		JMenu mnHelp = new JMenu("Help");
@@ -361,6 +373,7 @@ public class MainPanel extends JFrame {
 		// END OF ADD BOOK FUNCTIONS (LIBRARIAN)
 		
 <<<<<<< HEAD
+<<<<<<< HEAD
 		comboBox.setVisible(false);
 		
 		final JLabel lblEnterTheBorrower = DefaultComponentFactory.getInstance().createLabel("Enter the Borrower ID");
@@ -445,6 +458,11 @@ public class MainPanel extends JFrame {
 		
 		//Search
 =======
+=======
+		// Report N Most Popular for year Y (Components) -- (Librarian)
+		// TODO
+		
+>>>>>>> Generate checked out works on UI
 		// Sets Background -- MUST BE LAST to be background
 		JLabel lblNewLabel = new JLabel(new ImageIcon(ImageIO.read(new File("Images/library1.jpg"))));
 		lblNewLabel.setBounds(-2, -9, 502, 350);

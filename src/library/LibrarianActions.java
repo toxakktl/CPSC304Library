@@ -2,10 +2,23 @@ package library;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.Vector;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.TableColumn;
 
 
 public class LibrarianActions extends UserActions {
+
+	Vector columnNames = new Vector();
+	Vector data = new Vector();
+	JPanel panel = new JPanel();
 
 	public LibrarianActions(Connection c) {
 		super(c);
@@ -104,8 +117,44 @@ public class LibrarianActions extends UserActions {
 					"AND (BookCopy.copyNo = Borrowing.copyNo) " +
 					"WHERE BookCopy.status LIKE 'out'");
 
-			// update the database
-			ps.executeUpdate();
+
+			// produce view
+			ResultSet resultSearch = ps.executeQuery();
+			ResultSetMetaData rsmd = ps.getMetaData();
+
+
+			// create table panel
+			int numCols = rsmd.getColumnCount();
+			for (int i = 0; i < numCols; i++) {
+				// get column name and print it
+				columnNames.addElement(rsmd.getColumnName(i+1));
+				System.out.printf("%-15s", rsmd.getColumnName(i + 1));
+			}
+
+			while (resultSearch.next()) {
+				Vector row = new Vector(numCols);
+				for (int i = 1; i <= numCols; i++) {
+					row.addElement(resultSearch.getObject(i));
+				}
+				data.addElement(row);
+
+			}
+
+
+			resultSearch.close();
+			JTable table = new JTable(data, columnNames);
+			TableColumn column;
+			for (int i = 0; i < table.getColumnCount(); i++) {
+				column = table.getColumnModel().getColumn(i);
+				column.setMaxWidth(250);
+			}
+			JScrollPane scrollPane = new JScrollPane(table);
+			panel.add(scrollPane);               
+			JFrame frame = new JFrame();
+			frame.add(panel);         //adding panel to the frame
+			frame.setSize(600, 400); //setting frame size
+			frame.setVisible(true);
+
 			// commit work
 			con.commit();
 			ps.close();
@@ -156,7 +205,7 @@ public class LibrarianActions extends UserActions {
 							"WHERE rownum <= " + nRows + " " +
 							"ORDER BY count DESC; ";
 			getTop = con.prepareStatement(getTopString);
-			
+
 			getTop.executeUpdate(); // update database
 
 			// Joins View TOP with table BOOK and grabs titles and counts
@@ -166,8 +215,42 @@ public class LibrarianActions extends UserActions {
 							"ON book.callNumber = top.callNumber;";
 			getTitle = con.prepareStatement(getTitleString);
 
-			getTitle.executeUpdate(); // update database
-			
+			ResultSet resultSearch = getTitle.executeQuery(); // update database
+			ResultSetMetaData rsmd = resultSearch.getMetaData();
+
+
+			// create table panel
+			int numCols = rsmd.getColumnCount();
+			for (int i = 0; i < numCols; i++) {
+				// get column name and print it
+				columnNames.addElement(rsmd.getColumnName(i+1));
+				System.out.printf("%-15s", rsmd.getColumnName(i + 1));
+			}
+
+			while (resultSearch.next()) {
+				Vector row = new Vector(numCols);
+				for (int i = 1; i <= numCols; i++) {
+					row.addElement(resultSearch.getObject(i));
+				}
+				data.addElement(row);
+
+			}
+
+
+			resultSearch.close();
+			JTable table = new JTable(data, columnNames);
+			TableColumn column;
+			for (int i = 0; i < table.getColumnCount(); i++) {
+				column = table.getColumnModel().getColumn(i);
+				column.setMaxWidth(250);
+			}
+			JScrollPane scrollPane = new JScrollPane(table);
+			panel.add(scrollPane);               
+			JFrame frame = new JFrame();
+			frame.add(panel);         //adding panel to the frame
+			frame.setSize(600, 400); //setting frame size
+			frame.setVisible(true);
+
 			// commit work
 			con.commit();
 			getTop.close();
