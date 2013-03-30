@@ -3,8 +3,6 @@ package library;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
 
 public class LibrarianActions extends UserActions {
@@ -89,24 +87,22 @@ public class LibrarianActions extends UserActions {
 		}
 
 	}
-	
+
 	//	Generate report with all books that have been checked out
 	//	shows also dates checked out and due dates
 	//	flags overdue items << In java code?
-	//			SELECT *
-	//			FROM BookCopy JOIN Borrowing
-	//			ON (BookCopy.callNumber = Borrowing.callNumber) AND (BookCopy.copyNo = Borrowing.copyNo)
-	//			WHERE BookCopy.status LIKE 'OUT'
+	//		SELECT BookCopy.callNumber, BookCopy.copyNo, bid, status, outdate, indate
+	//		FROM BookCopy JOIN Borrowing
+	//		ON (BookCopy.callNumber = Borrowing.callNumber) AND (BookCopy.copyNo = Borrowing.copyNo)
+	//		WHERE BookCopy.status LIKE 'out'
 	public void generateCheckedOutReport() {
 		PreparedStatement ps = null;
 		try{
-			ps = con.prepareStatement("SELECT * " +
+			ps = con.prepareStatement("SELECT BookCopy.callNumber, BookCopy.copyNo, bid, status, outdate, indate " +
 					"FROM BookCopy JOIN Borrowing " +
 					"ON (BookCopy.callNumber = Borrowing.callNumber) " +
 					"AND (BookCopy.copyNo = Borrowing.copyNo) " +
-					"WHERE BookCopy.status LIKE 'OUT'");
-			
-			// THIS SQL QUERY MUST BE TESTED FIRST TODO
+					"WHERE BookCopy.status LIKE 'out'");
 
 			// update the database
 			ps.executeUpdate();
@@ -126,38 +122,56 @@ public class LibrarianActions extends UserActions {
 		}
 	}
 
-	//	Generate report with "N" most popular items for a given year
+	//	Generate report with "N" most popular items for a given year "Y"
 	//	n = top N, y = year
-	//			SELECT *
+	//		CREATE OR REPLACE VIEW top AS
+	//		SELECT *
+	//		FROM
+	//			(SELECT callNumber, count(callNumber) as count
 	//			FROM
-	//				(SELECT id, count(id) as count
-	//				FROM
-	//					(SELECT *
-	//					FROM Borrowing
-	//					WHERE outdate LIKE [Y] + '%')
-	//				GROUP BY id)
-	//			WHERE rownum <= [N]
-	//			ORDER BY count DESC;
+	//				(SELECT *
+	//				FROM Borrowing
+	//				WHERE outdate LIKE [Y] + '%')
+	//			GROUP BY callNumber)
+	//		WHERE rownum <= [N]
+	//		ORDER BY count DESC;
+	//
+	//		SELECT title, count 
+	//		FROM book JOIN top
+	//		ON book.callNumber = top.callNumber;
 	public void generateMostPopularReport(int n, int y) {
-		PreparedStatement ps = null;
+		PreparedStatement getTop = null;
+		PreparedStatement getTitle = null;
+		int yDigit = (y % 100);		// isolates last 2 digits ex. 2012 -> 12, 1992 -> 92
+		String justYear = new Integer(yDigit).toString();
+		String nRows = new Integer(n).toString();
 		try{
-			ps = con.prepareStatement("SELECT * FROM " +
-					"(SELECT bid, count(bid) as count FROM " +
-					"(SELECT * FROM Borrowing WHERE outdate LIKE '?%') " +
-					"GROUP BY bid) " +
-					"WHERE rownum <= ? " +
-					"ORDER BY count DESC");
+			// Creates a View of CallNumber, count called top
+			String getTopString =
+					"CREATE OR REPLACE VIEW top AS " +
+							"SELECT * FROM " +
+							"(SELECT callNumber, count(callNumber) as count " +
+							"FROM (SELECT * FROM Borrowing WHERE outdate LIKE '" + justYear + "%')" +
+							"GROUP BY callNumber) " +
+							"WHERE rownum <= " + nRows + " " +
+							"ORDER BY count DESC; ";
+			getTop = con.prepareStatement(getTopString);
+			
+			getTop.executeUpdate(); // update database
 
-			// TODO THIS SQL QUERY ONLY RETURNS BID AND COUNT OF BID! -- at least it should
+			// Joins View TOP with table BOOK and grabs titles and counts
+			String getTitleString = 
+					"SELECT title, count " +
+							"FROM book JOIN top " +
+							"ON book.callNumber = top.callNumber;";
+			getTitle = con.prepareStatement(getTitleString);
 
-			ps.setInt(1, y);
-			ps.setInt(2, 2);
-
-			// update the database
-			ps.executeUpdate();
+			getTitle.executeUpdate(); // update database
+			
 			// commit work
 			con.commit();
-			ps.close();
+			getTop.close();
+			getTitle.close();
 
 		} catch (SQLException ex) {
 			System.out.println("Message: " + ex.getMessage());
