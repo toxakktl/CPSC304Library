@@ -25,7 +25,11 @@ import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+<<<<<<< HEAD
 import library.BorrowerActions;
+=======
+import library.LibrarianActions;
+>>>>>>> Add Book works! Will add to your sql database
 import library.Library;
 import library.Library.BORROWER_ACTIONS;
 import javax.swing.JTextField;
@@ -332,7 +336,16 @@ public class MainPanel extends JFrame {
 				//				String dropDownItem = (String)comboBox.getSelectedItem();
 				//				String searchInputText = searchField.getText();
 				//				lib.borrowerActions(BORROWER_ACTIONS.SEARCH_BOOKS, searchInputText, dropDownItem);
-
+				LibrarianActions la = new LibrarianActions(con);
+				String cn = AddBookcallNumber.getText();
+				String isbn = AddBookisbn.getText();
+				String title = AddBooktitle.getText();
+				String author = AddBookauthor.getText();
+				String pub = AddBookpublisher.getText();
+				String year = AddBookyear.getText();
+				int y = Integer.parseInt(year);
+				la.addBook(cn, isbn, title, author, pub, y);
+				
 				lblWelcome.setVisible(true);
 				lblBookBack.setVisible(false);
 				btnAddBook.setVisible(false);
