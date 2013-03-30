@@ -2,7 +2,10 @@ package libraryUI;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -125,6 +128,61 @@ public class MainPanel extends JFrame {
 		
 		JMenuItem mntmPopularItems = new JMenuItem("Popular items");
 		mnLibrarian.add(mntmPopularItems);
+		
+		JMenu mnHelp = new JMenu("Help");
+		menuBar.add(mnHelp);
+		
+		JMenuItem mntmInitialize = new JMenuItem("Initiliaze tables");
+		mntmInitialize.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ScriptRunner runner = new ScriptRunner(con, false, false);
+				try {
+				runner.runScript(new BufferedReader(new FileReader("SQL/something.sql")));
+				} catch (FileNotFoundException e) {
+					System.out.println("Message: " + e.getMessage());
+				} catch (IOException e) {
+					System.out.println("Message: " + e.getMessage());
+				} catch (SQLException e) {
+					System.out.println("Message: " + e.getMessage());
+				}
+			}
+		});
+		mnHelp.add(mntmInitialize);
+		
+		JMenuItem mntmInsert = new JMenuItem("Insert default values");
+		mntmInsert.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ScriptRunner runner = new ScriptRunner(con, false, false);
+				try {
+				runner.runScript(new BufferedReader(new FileReader("SQL/Insert.sql")));
+				} catch (FileNotFoundException e) {
+					System.out.println("Message: " + e.getMessage());
+				} catch (IOException e) {
+					System.out.println("Message: " + e.getMessage());
+				} catch (SQLException e) {
+					System.out.println("Message: " + e.getMessage());
+				}
+			}
+		});
+		mnHelp.add(mntmInsert);
+		
+		JMenuItem mntmDelete = new JMenuItem("Delete all values");
+		mntmDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ScriptRunner runner = new ScriptRunner(con, false, false);
+				try {
+				runner.runScript(new BufferedReader(new FileReader("SQL/Delete.sql")));
+				} catch (FileNotFoundException e) {
+					System.out.println("Message: " + e.getMessage());
+				} catch (IOException e) {
+					System.out.println("Message: " + e.getMessage());
+				} catch (SQLException e) {
+					System.out.println("Message: " + e.getMessage());
+				}
+			}
+		});
+		mnHelp.add(mntmDelete);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 150, 150));
 		setContentPane(contentPane);
