@@ -40,28 +40,37 @@ public class MainPanel extends JFrame {
 	private JTextField searchField;
 	private JComboBox comboBox;
 	Connection con;
+<<<<<<< HEAD
 	private JTextField borrowerIDField;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField payFine;
 	
 
+=======
+	private JTextField AddBookcallNumber;
+	private JTextField AddBookisbn;
+	private JTextField AddBooktitle;
+	private JTextField AddBookauthor;
+	private JTextField AddBookpublisher;
+	private JTextField AddBookyear;
+>>>>>>> Added Add book visuals -- functionality to be implemented
 
 	/**
 	 * Launch the application.
 	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					MainPanel frame = new MainPanel();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	//	public static void main(String[] args) {
+	//		EventQueue.invokeLater(new Runnable() {
+	//			public void run() {
+	//				try {
+	//					MainPanel frame = new MainPanel();
+	//					frame.setVisible(true);
+	//				} catch (Exception e) {
+	//					e.printStackTrace();
+	//				}
+	//			}
+	//		});
+	//	}
 
 	/**
 	 * Create the frame.
@@ -71,73 +80,73 @@ public class MainPanel extends JFrame {
 		this.con = con;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 499, 355);
-		
+
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
-		
+
 		JMenu mnClerk = new JMenu("Clerk");
 		menuBar.add(mnClerk);
-		
+
 		JMenuItem mntmNewMenuItem = new JMenuItem("Add Borrower");
 		mnClerk.add(mntmNewMenuItem);
-		
+
 		JMenuItem mntmCheckOutItems = new JMenuItem("Check out items");
 		mnClerk.add(mntmCheckOutItems);
-		
+
 		JMenuItem mntmProcessAReturn = new JMenuItem("Process a return");
 		mnClerk.add(mntmProcessAReturn);
-		
+
 		JMenuItem mntmCheckOverdueItems = new JMenuItem("Check overdue items");
 		mnClerk.add(mntmCheckOverdueItems);
-		
+
 		JMenu mnBorrower = new JMenu("Borrower");
 		menuBar.add(mnBorrower);
-		
+
 		JMenuItem mntmSearch = new JMenuItem("Search");
-//		mntmSearch.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent arg0) {
-//				Library lib = new Library();
-//				lib.borrowerActions(BORROWER_ACTIONS.SEARCH_BOOKS);
-//			}
-//		});
+		//		mntmSearch.addActionListener(new ActionListener() {
+		//			public void actionPerformed(ActionEvent arg0) {
+		//				Library lib = new Library();
+		//				lib.borrowerActions(BORROWER_ACTIONS.SEARCH_BOOKS);
+		//			}
+		//		});
 		mnBorrower.add(mntmSearch);
-		
+
 		JMenuItem mntmCheckAccount = new JMenuItem("Check account");
 
 		mnBorrower.add(mntmCheckAccount);
-		
+
 		JMenuItem mntmPlaceAHold = new JMenuItem("Place a hold");
 
 		mnBorrower.add(mntmPlaceAHold);
-		
+
 		JMenuItem mntmPayAFine = new JMenuItem("Pay a fine");
 
 		mnBorrower.add(mntmPayAFine);
-		
+
 		JMenu mnLibrarian = new JMenu("Librarian");
 		menuBar.add(mnLibrarian);
-		
+
 		JMenuItem mntmAddABook = new JMenuItem("Add a book");
 		mnLibrarian.add(mntmAddABook);
-		
+
 		JMenuItem mntmAddACopy = new JMenuItem("Add a copy");
 		mnLibrarian.add(mntmAddACopy);
-		
+
 		JMenuItem mntmReportBooks = new JMenuItem("Report books");
 		mnLibrarian.add(mntmReportBooks);
-		
+
 		JMenuItem mntmPopularItems = new JMenuItem("Popular items");
 		mnLibrarian.add(mntmPopularItems);
-		
+
 		JMenu mnHelp = new JMenu("Help");
 		menuBar.add(mnHelp);
-		
+
 		JMenuItem mntmInitialize = new JMenuItem("Initiliaze tables");
 		mntmInitialize.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ScriptRunner runner = new ScriptRunner(con, false, false);
 				try {
-				runner.runScript(new BufferedReader(new FileReader("SQL/something.sql")));
+					runner.runScript(new BufferedReader(new FileReader("SQL/something.sql")));
 				} catch (FileNotFoundException e) {
 					System.out.println("Message: " + e.getMessage());
 				} catch (IOException e) {
@@ -148,13 +157,13 @@ public class MainPanel extends JFrame {
 			}
 		});
 		mnHelp.add(mntmInitialize);
-		
+
 		JMenuItem mntmInsert = new JMenuItem("Insert default values");
 		mntmInsert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ScriptRunner runner = new ScriptRunner(con, false, false);
 				try {
-				runner.runScript(new BufferedReader(new FileReader("SQL/Insert.sql")));
+					runner.runScript(new BufferedReader(new FileReader("SQL/Insert.sql")));
 				} catch (FileNotFoundException e) {
 					System.out.println("Message: " + e.getMessage());
 				} catch (IOException e) {
@@ -165,13 +174,13 @@ public class MainPanel extends JFrame {
 			}
 		});
 		mnHelp.add(mntmInsert);
-		
+
 		JMenuItem mntmDelete = new JMenuItem("Delete all values");
 		mntmDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ScriptRunner runner = new ScriptRunner(con, false, false);
 				try {
-				runner.runScript(new BufferedReader(new FileReader("SQL/Delete.sql")));
+					runner.runScript(new BufferedReader(new FileReader("SQL/Delete.sql")));
 				} catch (FileNotFoundException e) {
 					System.out.println("Message: " + e.getMessage());
 				} catch (IOException e) {
@@ -182,25 +191,26 @@ public class MainPanel extends JFrame {
 			}
 		});
 		mnHelp.add(mntmDelete);
-		
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 150, 150));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		final JLabel lblWelcome = DefaultComponentFactory.getInstance().createTitle("WELCOME");
 		lblWelcome.setForeground(Color.WHITE);
 		lblWelcome.setFont(new Font("Arial", Font.BOLD, 63));
 		lblWelcome.setBounds(84, 86, 397, 110);
 		contentPane.add(lblWelcome);
-		
+
+		// Components for Search (Clerk)
 		searchField = new JTextField();
 		searchField.setBounds(104, 20, 269, 28);
 		contentPane.add(searchField);
 		searchField.setColumns(10);
 		searchField.setVisible(false);
-	
-		
+
+
 		final JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -208,13 +218,22 @@ public class MainPanel extends JFrame {
 				BorrowerActions bActions = new BorrowerActions(con);
 				String dropDownItem = (String)comboBox.getSelectedItem();
 				String searchInputText = searchField.getText();
+<<<<<<< HEAD
 				bActions.searchBooks(searchInputText, dropDownItem);	
+=======
+				lib.borrowerActions(BORROWER_ACTIONS.SEARCH_BOOKS, searchInputText, dropDownItem);
+				lblWelcome.setVisible(true);
+				searchField.setVisible(false);
+				btnSearch.setVisible(false);
+				comboBox.setVisible(false);
+>>>>>>> Added Add book visuals -- functionality to be implemented
 			}
 		});
-		
+		btnSearch.setVisible(false);
+
 		btnSearch.setBounds(374, 21, 117, 29);
 		contentPane.add(btnSearch);
-		
+
 		comboBox = new JComboBox();
 		comboBox.addItem("Title");
 		comboBox.addItem("Author");
@@ -222,9 +241,113 @@ public class MainPanel extends JFrame {
 		comboBox.getItemAt(0);
 		comboBox.setBounds(6, 22, 96, 27);
 		contentPane.add(comboBox);
+
+		comboBox.setVisible(false);
+
+
+		// Components for Add book function (Librarian) TODO
+
+		AddBookcallNumber = new JTextField();
+		AddBookcallNumber.setBounds(240, 45, 134, 28);
+		contentPane.add(AddBookcallNumber);
+		AddBookcallNumber.setColumns(10);
+
+		AddBookisbn = new JTextField();
+		AddBookisbn.setBounds(240, 75, 134, 28);
+		contentPane.add(AddBookisbn);
+		AddBookisbn.setColumns(10);
+
+		AddBooktitle = new JTextField();
+		AddBooktitle.setBounds(240, 105, 134, 28);
+		contentPane.add(AddBooktitle);
+		AddBooktitle.setColumns(10);
+
+		AddBookauthor = new JTextField();
+		AddBookauthor.setBounds(240, 135, 134, 28);
+		contentPane.add(AddBookauthor);
+		AddBookauthor.setColumns(10);
+
+		AddBookpublisher = new JTextField();
+		AddBookpublisher.setBounds(240, 165, 134, 28);
+		contentPane.add(AddBookpublisher);
+		AddBookpublisher.setColumns(10);
+
+		AddBookyear = new JTextField();
+		AddBookyear.setBounds(240, 195, 134, 28);
+		contentPane.add(AddBookyear);
+		AddBookyear.setColumns(10);
+
+		final JLabel lblCallNumber = new JLabel("Call Number");
+		lblCallNumber.setFont(new Font("Lucida Grande", Font.BOLD, 15));
+		lblCallNumber.setBounds(120, 45, 98, 19);
+		contentPane.add(lblCallNumber);
+
+		final JLabel lblIsbn = new JLabel("ISBN");
+		lblIsbn.setFont(new Font("Lucida Grande", Font.BOLD, 15));
+		lblIsbn.setBounds(120, 75, 35, 19);
+		contentPane.add(lblIsbn);
+
+		final JLabel lblBookTitle = new JLabel("Book Title");
+		lblBookTitle.setFont(new Font("Lucida Grande", Font.BOLD, 15));
+		lblBookTitle.setBounds(120, 105, 78, 19);
+		contentPane.add(lblBookTitle);
+
+		final JLabel lblMainAuthor = new JLabel("Main Author");
+		lblMainAuthor.setFont(new Font("Lucida Grande", Font.BOLD, 15));
+		lblMainAuthor.setBounds(120, 135, 97, 19);
+		contentPane.add(lblMainAuthor);
+
+		final JLabel lblPublisher = new JLabel("Publisher");
+		lblPublisher.setFont(new Font("Lucida Grande", Font.BOLD, 15));
+		lblPublisher.setBounds(120, 165, 73, 19);
+		contentPane.add(lblPublisher);
+
+		final JLabel lblYearPublished = new JLabel("Year Published");
+		lblYearPublished.setFont(new Font("Lucida Grande", Font.BOLD, 15));
+		lblYearPublished.setBounds(120, 195, 116, 19);
+		contentPane.add(lblYearPublished);
+
+		setAddBookVisible(false);
+		lblCallNumber.setVisible(false);
+		lblIsbn.setVisible(false);
+		lblBookTitle.setVisible(false);
+		lblMainAuthor.setVisible(false);
+		lblPublisher.setVisible(false);
+		lblYearPublished.setVisible(false);
 		
+		final JButton btnAddBook = new JButton("Add Book");
+		btnAddBook.setVisible(false);
+		btnAddBook.setBounds(250, 230, 117, 29);
+		contentPane.add(btnAddBook);
+
+		// Sets Background for Add Book
+		final JLabel lblBookBack = new JLabel(new ImageIcon(ImageIO.read(new File("Images/book1.jpg"))));
+		lblBookBack.setBounds(-2, -9, 502, 350);
+		contentPane.add(lblBookBack);
+		lblBookBack.setVisible(false);
 		
+		btnAddBook.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//				Library lib = new Library(con);
+				//				String dropDownItem = (String)comboBox.getSelectedItem();
+				//				String searchInputText = searchField.getText();
+				//				lib.borrowerActions(BORROWER_ACTIONS.SEARCH_BOOKS, searchInputText, dropDownItem);
+
+				lblWelcome.setVisible(true);
+				lblBookBack.setVisible(false);
+				btnAddBook.setVisible(false);
+				setAddBookVisible(false);
+				lblCallNumber.setVisible(false);
+				lblIsbn.setVisible(false);
+				lblBookTitle.setVisible(false);
+				lblMainAuthor.setVisible(false);
+				lblPublisher.setVisible(false);
+				lblYearPublished.setVisible(false);
+			}
+		});
+		// END OF ADD BOOK FUNCTIONS (LIBRARIAN)
 		
+<<<<<<< HEAD
 		comboBox.setVisible(false);
 		
 		final JLabel lblEnterTheBorrower = DefaultComponentFactory.getInstance().createLabel("Enter the Borrower ID");
@@ -308,6 +431,17 @@ public class MainPanel extends JFrame {
 		btnSearch.setVisible(false);
 		
 		//Search
+=======
+		// Sets Background -- MUST BE LAST to be background
+		JLabel lblNewLabel = new JLabel(new ImageIcon(ImageIO.read(new File("Images/library1.jpg"))));
+		lblNewLabel.setBounds(-2, -9, 502, 350);
+		contentPane.add(lblNewLabel);
+
+	
+
+		// Changing window visibilities for functions
+		/* Change window for Search */
+>>>>>>> Added Add book visuals -- functionality to be implemented
 		mntmSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (borrowerIDField.isVisible() && btnSubmit.isVisible() && lblEnterTheBorrower.isVisible())
@@ -332,6 +466,7 @@ public class MainPanel extends JFrame {
 				lblWelcome.setVisible(false);
 				searchField.setVisible(true);
 				btnSearch.setVisible(true);
+<<<<<<< HEAD
 				comboBox.setVisible(true);		
 			}
 		});
@@ -472,5 +607,49 @@ public class MainPanel extends JFrame {
 				}
 			}
 		});
+=======
+				comboBox.setVisible(true);
+
+			}
+		});
+		/* Change window for Add Book */
+
+		mntmAddABook.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				lblWelcome.setVisible(false);
+				lblBookBack.setVisible(true);
+				setAddBookVisible(true);
+				btnAddBook.setVisible(true);
+				lblCallNumber.setVisible(true);
+				lblIsbn.setVisible(true);
+				lblBookTitle.setVisible(true);
+				lblMainAuthor.setVisible(true);
+				lblPublisher.setVisible(true);
+				lblYearPublished.setVisible(true);
+			}
+		});
+
+
+	}
+
+	private void setAddBookVisible(boolean b){
+		if (b){
+			AddBookcallNumber.setVisible(true);
+			AddBookisbn.setVisible(true);
+			AddBooktitle.setVisible(true);
+			AddBookauthor.setVisible(true);
+			AddBookpublisher.setVisible(true);
+			AddBookyear.setVisible(true);
+
+		}
+		else {
+			AddBookcallNumber.setVisible(false);
+			AddBookisbn.setVisible(false);
+			AddBooktitle.setVisible(false);
+			AddBookauthor.setVisible(false);
+			AddBookpublisher.setVisible(false);
+			AddBookyear.setVisible(false);
+		}
+>>>>>>> Added Add book visuals -- functionality to be implemented
 	}
 }
