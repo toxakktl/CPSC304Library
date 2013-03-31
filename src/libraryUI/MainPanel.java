@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -21,11 +22,14 @@ import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import library.BorrowerActions;
 import library.Library;
 import library.Library.BORROWER_ACTIONS;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
 
 public class MainPanel extends JFrame {
 
@@ -33,6 +37,12 @@ public class MainPanel extends JFrame {
 	private JTextField searchField;
 	private JComboBox comboBox;
 	Connection con;
+	private JTextField borrowerIDField;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField payFine;
+	
+
 
 	/**
 	 * Launch the application.
@@ -90,12 +100,15 @@ public class MainPanel extends JFrame {
 		mnBorrower.add(mntmSearch);
 		
 		JMenuItem mntmCheckAccount = new JMenuItem("Check account");
+
 		mnBorrower.add(mntmCheckAccount);
 		
 		JMenuItem mntmPlaceAHold = new JMenuItem("Place a hold");
+
 		mnBorrower.add(mntmPlaceAHold);
 		
 		JMenuItem mntmPayAFine = new JMenuItem("Pay a fine");
+
 		mnBorrower.add(mntmPayAFine);
 		
 		JMenu mnLibrarian = new JMenu("Librarian");
@@ -133,11 +146,11 @@ public class MainPanel extends JFrame {
 		final JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Library lib = new Library(con);
+				//Library lib = new Library(con);
+				BorrowerActions bActions = new BorrowerActions(con);
 				String dropDownItem = (String)comboBox.getSelectedItem();
 				String searchInputText = searchField.getText();
-				lib.borrowerActions(BORROWER_ACTIONS.SEARCH_BOOKS, searchInputText, dropDownItem);
-				
+				bActions.searchBooks(searchInputText, dropDownItem);	
 			}
 		});
 		
@@ -156,18 +169,249 @@ public class MainPanel extends JFrame {
 		
 		comboBox.setVisible(false);
 		
+		final JLabel lblEnterTheBorrower = DefaultComponentFactory.getInstance().createLabel("Enter the Borrower ID");
+		lblEnterTheBorrower.setFont(new Font("Lucida Grande", Font.BOLD, 17));
+		lblEnterTheBorrower.setForeground(Color.WHITE);
+		lblEnterTheBorrower.setBounds(17, 26, 205, 16);
+		contentPane.add(lblEnterTheBorrower);
+		lblEnterTheBorrower.setVisible(false);
+		
+		borrowerIDField = new JTextField();
+		borrowerIDField.setBounds(17, 60, 134, 28);
+		contentPane.add(borrowerIDField);
+		borrowerIDField.setColumns(10);
+		borrowerIDField.setVisible(false);
+		
+		final JButton btnSubmit = new JButton("Submit");
+
+		btnSubmit.setBounds(151, 60, 117, 29);
+		contentPane.add(btnSubmit);
+		
+		
+		
+		final JLabel lblBorrowerId = DefaultComponentFactory.getInstance().createLabel("Borrower ID");
+		lblBorrowerId.setFont(new Font("Lucida Grande", Font.BOLD, 15));
+		lblBorrowerId.setForeground(Color.WHITE);
+		lblBorrowerId.setBounds(19, 25, 120, 16);
+		contentPane.add(lblBorrowerId);
+		lblBorrowerId.setVisible(false);
+		
+		final JLabel lblCallNumber = DefaultComponentFactory.getInstance().createLabel("Call Number");
+		lblCallNumber.setFont(new Font("Lucida Grande", Font.BOLD, 15));
+		lblCallNumber.setForeground(Color.WHITE);
+		lblCallNumber.setBounds(152, 25, 120, 16);
+		contentPane.add(lblCallNumber);
+		lblCallNumber.setVisible(false);
+		
+		textField = new JTextField();
+		textField.setBounds(151, 54, 134, 28);
+		contentPane.add(textField);
+		textField.setColumns(10);
+		textField.setVisible(false);
+		
+		textField_1 = new JTextField();
+		textField_1.setBounds(16, 54, 134, 28);
+		contentPane.add(textField_1);
+		textField_1.setColumns(10);
+		textField_1.setVisible(false);
+		
+		final JButton hold = new JButton("Submit");
+	
+		hold.setBounds(291, 55, 117, 29);
+		contentPane.add(hold);
+		
+		final JLabel lblEnterTheFid = DefaultComponentFactory.getInstance().createLabel("Enter the FID");
+		lblEnterTheFid.setFont(new Font("Lucida Grande", Font.BOLD, 15));
+		lblEnterTheFid.setForeground(Color.WHITE);
+		lblEnterTheFid.setBounds(29, 26, 120, 16);
+		contentPane.add(lblEnterTheFid);
+		lblEnterTheFid.setVisible(false);
+		
+		payFine = new JTextField();
+		payFine.setBounds(27, 60, 134, 28);
+		contentPane.add(payFine);
+		payFine.setColumns(10);
+		payFine.setVisible(false);
+		
+		final JButton pay = new JButton("Pay");
+	
+		pay.setBounds(173, 60, 117, 29);
+		contentPane.add(pay);
+		pay.setVisible(false);
+		
 		JLabel lblNewLabel = new JLabel(new ImageIcon(ImageIO.read(new File("Images/library1.jpg"))));
 		lblNewLabel.setBounds(-2, -9, 502, 350);
 		contentPane.add(lblNewLabel);
+		hold.setVisible(false);
+	
+		
+		btnSubmit.setVisible(false);
+		
 		btnSearch.setVisible(false);
 		
+		//Search
 		mntmSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if (borrowerIDField.isVisible() && btnSubmit.isVisible() && lblEnterTheBorrower.isVisible())
+				{
+					borrowerIDField.setVisible(false);
+					btnSubmit.setVisible(false);
+					lblEnterTheBorrower.setVisible(false);
+				}
+				if (lblBorrowerId.isVisible() && lblCallNumber.isVisible() && textField.isVisible()&&textField_1.isVisible()&hold.isVisible())
+				{
+					lblBorrowerId.setVisible(false);
+					lblCallNumber.setVisible(false);
+					textField.setVisible(false);
+					textField_1.setVisible(false);
+					hold.setVisible(false);
+				}
+				if (lblEnterTheFid.isVisible()&&pay.isVisible()&&payFine.isVisible()){
+					lblEnterTheFid.setVisible(false);
+					pay.setVisible(false);
+					payFine.setVisible(false);
+				}
 				lblWelcome.setVisible(false);
 				searchField.setVisible(true);
 				btnSearch.setVisible(true);
-				comboBox.setVisible(true);
+				comboBox.setVisible(true);		
+			}
+		});
+		
+		//Check account
+		mntmCheckAccount.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				lblWelcome.setVisible(false);
+				if (searchField.isVisible())
+					searchField.setVisible(false);
+				if (btnSearch.isVisible())
+					btnSearch.setVisible(false);
+				if (comboBox.isVisible())
+					comboBox.setVisible(false);
+				if (lblBorrowerId.isVisible() && lblCallNumber.isVisible() && textField.isVisible()&&textField_1.isVisible()&hold.isVisible())
+				{
+					lblBorrowerId.setVisible(false);
+					lblCallNumber.setVisible(false);
+					textField.setVisible(false);
+					textField_1.setVisible(false);
+					hold.setVisible(false);
+				}
+				if (lblEnterTheFid.isVisible()&&pay.isVisible()&&payFine.isVisible()){
+					lblEnterTheFid.setVisible(false);
+					pay.setVisible(false);
+					payFine.setVisible(false);
+				}
+				lblEnterTheBorrower.setVisible(true);
+				btnSubmit.setVisible(true);
+				borrowerIDField.setVisible(true);
+			}
+		});
+		
+		//on click Submit for checking account
+		btnSubmit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				BorrowerActions bact = new BorrowerActions(con);
+				bact.checkAccount(borrowerIDField.getText());
+			}
+		});
+		
+		//Place a hold
+		mntmPlaceAHold.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				
+				//Add shit
+				lblWelcome.setVisible(false);
+				
+				if (searchField.isVisible())
+					searchField.setVisible(false);
+				if (btnSearch.isVisible())
+					btnSearch.setVisible(false);
+				if (comboBox.isVisible())
+					comboBox.setVisible(false);
+				if (borrowerIDField.isVisible() && btnSubmit.isVisible() && lblEnterTheBorrower.isVisible())
+				{
+					borrowerIDField.setVisible(false);
+					btnSubmit.setVisible(false);
+					lblEnterTheBorrower.setVisible(false);
+				}
+				if (lblEnterTheFid.isVisible()&&pay.isVisible()&&payFine.isVisible()){
+					lblEnterTheFid.setVisible(false);
+					pay.setVisible(false);
+					payFine.setVisible(false);
+				}
+				lblBorrowerId.setVisible(true);
+				lblCallNumber.setVisible(true);
+				textField.setVisible(true);
+				textField_1.setVisible(true);
+				hold.setVisible(true);
+			
+				
+				
+			}
+		});
+		
+		//on click place a hold request
+		hold.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				try {
+					BorrowerActions baH = new BorrowerActions(con);
+					baH.placeHold(Integer.parseInt(textField_1.getText()), textField.getText());
+				} catch (NumberFormatException e1) {
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		
+		//On click menu item pay a Fine
+		mntmPayAFine.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(lblWelcome.isVisible())
+					lblWelcome.setVisible(false);
+				
+				if (borrowerIDField.isVisible() && btnSubmit.isVisible() && lblEnterTheBorrower.isVisible())
+				{
+					borrowerIDField.setVisible(false);
+					btnSubmit.setVisible(false);
+					lblEnterTheBorrower.setVisible(false);
+				}
+				if (lblBorrowerId.isVisible() && lblCallNumber.isVisible() && textField.isVisible()&&textField_1.isVisible()&hold.isVisible())
+				{
+					lblBorrowerId.setVisible(false);
+					lblCallNumber.setVisible(false);
+					textField.setVisible(false);
+					textField_1.setVisible(false);
+					hold.setVisible(false);
+				}
+				if (searchField.isVisible())
+					searchField.setVisible(false);
+				if (btnSearch.isVisible())
+					btnSearch.setVisible(false);
+				if (comboBox.isVisible())
+					comboBox.setVisible(false);
+				
+				lblEnterTheFid.setVisible(true);
+				payFine.setVisible(true);
+				pay.setVisible(true);
+				
+				
+			}
+		});
+		
+		//on click pay button
+		pay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					BorrowerActions baP = new BorrowerActions(con);
+					baP.payFines(Integer.parseInt(payFine.getText()));
+				} catch (NumberFormatException e1) {
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 	}

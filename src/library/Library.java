@@ -38,6 +38,7 @@ public class Library implements ActionListener {
 	Vector columnNames = new Vector();
 	Vector data = new Vector();
 	JPanel panel = new JPanel();
+	JTable table;
 
 	private enum CLERK_ACTIONS {
 		ADD_BORROWER, CHECK_OUT, CHECK_IN, CHECK_IN_OVERDUE;
@@ -150,17 +151,6 @@ public class Library implements ActionListener {
 	}
 	
 	public void borrowerActions(BORROWER_ACTIONS ba, String searchField, String dropdown) {
-		//Table fields
-		String title_id;
-		String title;
-		String type;
-		String pub_id;
-		int price;
-		String advance;
-		int ytd_sales;
-		String contract; 
-		String notes;
-		String pubdate;
 		Statement stm;
 		
 		try {
@@ -168,14 +158,13 @@ public class Library implements ActionListener {
 			switch (ba) {
 			case SEARCH_BOOKS:
 
-				System.out.println(searchField);
 				try{
 				stm = con.createStatement();
 				if (dropdown.equals("Title")){
-					System.out.println("Title Item was selected from DropDown list");
-					ResultSet resultSearch = stm.executeQuery("SELECT * FROM titles WHERE title = '" + searchField + "'");
+					
+					//TODO Later replace query to Book, and title				
+					ResultSet resultSearch = stm.executeQuery("SELECT * FROM authors WHERE au_lname = '" + searchField + "'");
 					ResultSetMetaData rsmd = resultSearch.getMetaData();
-					//System.out.println("does it get here?");
 					 //get number of columns
 					int numCols = rsmd.getColumnCount();
 					for (int i = 0; i < numCols; i++) {
@@ -190,40 +179,13 @@ public class Library implements ActionListener {
 			                    row.addElement(resultSearch.getObject(i));
 			                }
 						  data.addElement(row);
-						  
-						// for display purposes get everything from Oracle
-						// as a string
-
-						// simplified output formatting; truncation may occur
-
-//						title_id = resultSearch.getString("title_id");
-//						System.out.printf("\n%-10.10s", title_id);
-
-//						bname = rs.getString("branch_name");
-//						System.out.printf("%-20.20s", bname);
-//
-//						baddr = rs.getString("branch_addr");
-//						if (rs.wasNull()) {
-//							System.out.printf("%-20.20s", " ");
-//						} else {
-//							System.out.printf("%-20.20s", baddr);
-//						}
-//
-//						bcity = rs.getString("branch_city");
-//						System.out.printf("%-15.15s", bcity);
-//
-//						bphone = rs.getString("branch_phone");
-//						if (rs.wasNull()) {
-//							System.out.printf("%-15.15s\n", " ");
-//						} else {
-//							System.out.printf("%-15.15s\n", bphone);
-//						}
 					}
-					
-					
+							
 					resultSearch.close();
 					stm.close();
-					JTable table = new JTable(data, columnNames);
+					//New JFrame window for result table 
+					table = new JTable(data, columnNames);
+				
 			        TableColumn column;
 			        for (int i = 0; i < table.getColumnCount(); i++) {
 			            column = table.getColumnModel().getColumn(i);
@@ -233,18 +195,89 @@ public class Library implements ActionListener {
 			        panel.add(scrollPane);               
 			        JFrame frame = new JFrame();
 			        frame.add(panel);         //adding panel to the frame
-			        frame.setSize(600, 400); //setting frame size
+			        frame.setSize(460, 450); //setting frame size
 			        frame.setVisible(true);
+			        
 				}else if (dropdown.equals("Author")){
-					System.out.println("Author Item was selected from DropDown list");
-				}else
-					System.out.println("Subject Item was selected from DropDown list");
+					//TODO Later chnage the query to Book, authors
+					ResultSet resultSearch = stm.executeQuery("SELECT * FROM publishers WHERE pub_name = '" + searchField + "'");
+					ResultSetMetaData rsmd = resultSearch.getMetaData();
+					int numCols = rsmd.getColumnCount();
+					for (int i = 0; i < numCols; i++) {
+						// get column name and print it
+						columnNames.addElement(rsmd.getColumnName(i+1));
+						System.out.printf("%-15s", rsmd.getColumnName(i + 1));
+					}
+					
+					while (resultSearch.next()) {
+						Vector row = new Vector(numCols);
+						  for (int i = 1; i <= numCols; i++) {
+			                    row.addElement(resultSearch.getObject(i));
+			                }
+						  data.addElement(row);
+					}
+							
+					resultSearch.close();
+					stm.close();
+					//New JFrame window for result table 
+					table = new JTable(data, columnNames);			
+			        TableColumn column;
+			        for (int i = 0; i < table.getColumnCount(); i++) {
+			            column = table.getColumnModel().getColumn(i);
+			            column.setMaxWidth(250);
+			        }
+			        JScrollPane scrollPane = new JScrollPane(table);
+			        panel.add(scrollPane);               
+			        JFrame frame = new JFrame();
+			        frame.add(panel);         //adding panel to the frame
+			        frame.setSize(460, 450); //setting frame size
+			        frame.setVisible(true);
+				}else{
+					//TODO Later replace query to Book, and title				
+					ResultSet resultSearch = stm.executeQuery("SELECT * FROM roysched WHERE title_id = '" + searchField + "'");
+					ResultSetMetaData rsmd = resultSearch.getMetaData();
+					 //get number of columns
+					int numCols = rsmd.getColumnCount();
+					for (int i = 0; i < numCols; i++) {
+						// get column name and print it
+						columnNames.addElement(rsmd.getColumnName(i+1));
+						System.out.printf("%-15s", rsmd.getColumnName(i + 1));
+					}
+					
+					while (resultSearch.next()) {
+						Vector row = new Vector(numCols);
+						  for (int i = 1; i <= numCols; i++) {
+			                    row.addElement(resultSearch.getObject(i));
+			                }
+						  data.addElement(row);
+					}
+							
+					resultSearch.close();
+					stm.close();
+					//New JFrame window for result table 
+					table = new JTable(data, columnNames);
+				
+			        TableColumn column;
+			        for (int i = 0; i < table.getColumnCount(); i++) {
+			            column = table.getColumnModel().getColumn(i);
+			            column.setMaxWidth(250);
+			        }
+			        JScrollPane scrollPane = new JScrollPane(table);
+			        panel.add(scrollPane);               
+			        JFrame frame = new JFrame();
+			        frame.add(panel);         //adding panel to the frame
+			        frame.setSize(460, 450); //setting frame size
+			        frame.setVisible(true);
+				}
+					
 				}catch (SQLException ex){
 					System.out.println("The SQL Exception has occured:" + ex);
 				}
 				break;
 			case CHECK_ACCOUNT:
 				//TODO Tokhtar
+				stm = con.createStatement();
+				ResultSet rs = stm.executeQuery("SELECT bid, callNumber FROM Borrowing");
 				break;
 			case PLACE_HOLD:
 				ps = con.prepareStatement("");
@@ -313,6 +346,7 @@ public class Library implements ActionListener {
 	 */
 	public Library(Connection connect) {
 		//panel = jp;
+		//this.table = table;
 		con = connect;
 	}
 
