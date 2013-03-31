@@ -24,12 +24,8 @@ import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
-<<<<<<< HEAD
 import library.BorrowerActions;
-=======
 import library.LibrarianActions;
->>>>>>> Add Book works! Will add to your sql database
 import library.Library;
 import library.Library.BORROWER_ACTIONS;
 import javax.swing.JTextField;
@@ -44,26 +40,23 @@ public class MainPanel extends JFrame {
 	private JTextField searchField;
 	private JComboBox comboBox;
 	Connection con;
-<<<<<<< HEAD
 	private JTextField borrowerIDField;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField payFine;
-	
 
-=======
+
+
 	private JTextField AddBookcallNumber;
 	private JTextField AddBookisbn;
 	private JTextField AddBooktitle;
 	private JTextField AddBookauthor;
 	private JTextField AddBookpublisher;
 	private JTextField AddBookyear;
-<<<<<<< HEAD
->>>>>>> Added Add book visuals -- functionality to be implemented
-=======
+
 	private JTextField GMPNum;
 	private JTextField GMPYear;
->>>>>>> Added UI buttons for Generate Most Popular
+
 
 	/**
 	 * Launch the application.
@@ -235,19 +228,19 @@ public class MainPanel extends JFrame {
 		final JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Library lib = new Library(con);
+				Library lib = new Library(con);
 				BorrowerActions bActions = new BorrowerActions(con);
 				String dropDownItem = (String)comboBox.getSelectedItem();
 				String searchInputText = searchField.getText();
-<<<<<<< HEAD
+
 				bActions.searchBooks(searchInputText, dropDownItem);	
-=======
+
 				lib.borrowerActions(BORROWER_ACTIONS.SEARCH_BOOKS, searchInputText, dropDownItem);
 				lblWelcome.setVisible(true);
 				searchField.setVisible(false);
 				btnSearch.setVisible(false);
 				comboBox.setVisible(false);
->>>>>>> Added Add book visuals -- functionality to be implemented
+
 			}
 		});
 		btnSearch.setVisible(false);
@@ -298,10 +291,10 @@ public class MainPanel extends JFrame {
 		contentPane.add(AddBookyear);
 		AddBookyear.setColumns(10);
 
-		final JLabel lblCallNumber = new JLabel("Call Number");
-		lblCallNumber.setFont(new Font("Lucida Grande", Font.BOLD, 15));
-		lblCallNumber.setBounds(120, 45, 98, 19);
-		contentPane.add(lblCallNumber);
+		final JLabel lblABCallNumber = new JLabel("Call Number");
+		lblABCallNumber.setFont(new Font("Lucida Grande", Font.BOLD, 15));
+		lblABCallNumber.setBounds(120, 45, 98, 19);
+		contentPane.add(lblABCallNumber);
 
 		final JLabel lblIsbn = new JLabel("ISBN");
 		lblIsbn.setFont(new Font("Lucida Grande", Font.BOLD, 15));
@@ -329,13 +322,13 @@ public class MainPanel extends JFrame {
 		contentPane.add(lblYearPublished);
 
 		setAddBookVisible(false);
-		lblCallNumber.setVisible(false);
+		lblABCallNumber.setVisible(false);
 		lblIsbn.setVisible(false);
 		lblBookTitle.setVisible(false);
 		lblMainAuthor.setVisible(false);
 		lblPublisher.setVisible(false);
 		lblYearPublished.setVisible(false);
-		
+
 		final JButton btnAddBook = new JButton("Add Book");
 		btnAddBook.setVisible(false);
 		btnAddBook.setBounds(250, 230, 117, 29);
@@ -351,7 +344,7 @@ public class MainPanel extends JFrame {
 		lblGMPYear.setFont(new Font("Lucida Grande", Font.BOLD, 15));
 		lblGMPYear.setBounds(120, 135, 110, 19);
 		contentPane.add(lblGMPYear);
-		
+
 		GMPNum = new JTextField();
 		GMPNum.setBounds(240, 105, 134, 28);
 		contentPane.add(GMPNum);
@@ -361,12 +354,12 @@ public class MainPanel extends JFrame {
 		GMPYear.setBounds(240, 135, 134, 28);
 		contentPane.add(GMPYear);
 		GMPYear.setColumns(10);
-		
+
 		final JButton btnGMP = new JButton("Get Top Books");
 		btnGMP.setVisible(false);
 		btnGMP.setBounds(250, 165, 117, 29);
 		contentPane.add(btnGMP);
-		
+
 		lblGMPNum.setVisible(false);
 		lblGMPYear.setVisible(false);
 		GMPNum.setVisible(false);
@@ -379,7 +372,7 @@ public class MainPanel extends JFrame {
 		lblBookBack.setBounds(-2, -9, 502, 350);
 		contentPane.add(lblBookBack);
 		lblBookBack.setVisible(false);
-		
+
 		btnAddBook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				LibrarianActions la = new LibrarianActions(con);
@@ -391,12 +384,12 @@ public class MainPanel extends JFrame {
 				String year = AddBookyear.getText();
 				int y = Integer.parseInt(year);
 				la.addBook(cn, isbn, title, author, pub, y);
-				
+
 				lblWelcome.setVisible(true);
 				lblBookBack.setVisible(false);
 				btnAddBook.setVisible(false);
 				setAddBookVisible(false);
-				lblCallNumber.setVisible(false);
+				lblABCallNumber.setVisible(false);
 				lblIsbn.setVisible(false);
 				lblBookTitle.setVisible(false);
 				lblMainAuthor.setVisible(false);
@@ -405,94 +398,88 @@ public class MainPanel extends JFrame {
 			}
 		});
 		// END OF ADD BOOK FUNCTIONS (LIBRARIAN)
-		
-<<<<<<< HEAD
-<<<<<<< HEAD
+
+
 		comboBox.setVisible(false);
-		
+
 		final JLabel lblEnterTheBorrower = DefaultComponentFactory.getInstance().createLabel("Enter the Borrower ID");
 		lblEnterTheBorrower.setFont(new Font("Lucida Grande", Font.BOLD, 17));
 		lblEnterTheBorrower.setForeground(Color.WHITE);
 		lblEnterTheBorrower.setBounds(17, 26, 205, 16);
 		contentPane.add(lblEnterTheBorrower);
 		lblEnterTheBorrower.setVisible(false);
-		
+
 		borrowerIDField = new JTextField();
 		borrowerIDField.setBounds(17, 60, 134, 28);
 		contentPane.add(borrowerIDField);
 		borrowerIDField.setColumns(10);
 		borrowerIDField.setVisible(false);
-		
+
 		final JButton btnSubmit = new JButton("Submit");
 
 		btnSubmit.setBounds(151, 60, 117, 29);
 		contentPane.add(btnSubmit);
-		
-		
-		
+
+
+
 		final JLabel lblBorrowerId = DefaultComponentFactory.getInstance().createLabel("Borrower ID");
 		lblBorrowerId.setFont(new Font("Lucida Grande", Font.BOLD, 15));
 		lblBorrowerId.setForeground(Color.WHITE);
 		lblBorrowerId.setBounds(19, 25, 120, 16);
 		contentPane.add(lblBorrowerId);
 		lblBorrowerId.setVisible(false);
-		
+
 		final JLabel lblCallNumber = DefaultComponentFactory.getInstance().createLabel("Call Number");
 		lblCallNumber.setFont(new Font("Lucida Grande", Font.BOLD, 15));
 		lblCallNumber.setForeground(Color.WHITE);
 		lblCallNumber.setBounds(152, 25, 120, 16);
 		contentPane.add(lblCallNumber);
 		lblCallNumber.setVisible(false);
-		
+
 		textField = new JTextField();
 		textField.setBounds(151, 54, 134, 28);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		textField.setVisible(false);
-		
+
 		textField_1 = new JTextField();
 		textField_1.setBounds(16, 54, 134, 28);
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 		textField_1.setVisible(false);
-		
+
 		final JButton hold = new JButton("Submit");
-	
+
 		hold.setBounds(291, 55, 117, 29);
 		contentPane.add(hold);
-		
+
 		final JLabel lblEnterTheFid = DefaultComponentFactory.getInstance().createLabel("Enter the FID");
 		lblEnterTheFid.setFont(new Font("Lucida Grande", Font.BOLD, 15));
 		lblEnterTheFid.setForeground(Color.WHITE);
 		lblEnterTheFid.setBounds(29, 26, 120, 16);
 		contentPane.add(lblEnterTheFid);
 		lblEnterTheFid.setVisible(false);
-		
+
 		payFine = new JTextField();
 		payFine.setBounds(27, 60, 134, 28);
 		contentPane.add(payFine);
 		payFine.setColumns(10);
 		payFine.setVisible(false);
-		
+
 		final JButton pay = new JButton("Pay");
-	
+
 		pay.setBounds(173, 60, 117, 29);
 		contentPane.add(pay);
 		pay.setVisible(false);
-		
-		JLabel lblNewLabel = new JLabel(new ImageIcon(ImageIO.read(new File("Images/library1.jpg"))));
-		lblNewLabel.setBounds(-2, -9, 502, 350);
-		contentPane.add(lblNewLabel);
+
 		hold.setVisible(false);
-	
-		
+
+
 		btnSubmit.setVisible(false);
-		
+
 		btnSearch.setVisible(false);
-		
+
 		//Search
-=======
-=======
 		// Report N Most Popular for year Y (Components) -- (Librarian)
 		btnGMP.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -506,18 +493,17 @@ public class MainPanel extends JFrame {
 				GMPYear.setVisible(false);
 			}
 		});
-		
->>>>>>> Generate checked out works on UI
+
+
 		// Sets Background -- MUST BE LAST to be background
 		JLabel lblNewLabel = new JLabel(new ImageIcon(ImageIO.read(new File("Images/library1.jpg"))));
 		lblNewLabel.setBounds(-2, -9, 502, 350);
 		contentPane.add(lblNewLabel);
 
-	
+
 
 		// Changing window visibilities for functions
 		/* Change window for Search */
->>>>>>> Added Add book visuals -- functionality to be implemented
 		mntmSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (borrowerIDField.isVisible() && btnSubmit.isVisible() && lblEnterTheBorrower.isVisible())
@@ -542,11 +528,11 @@ public class MainPanel extends JFrame {
 				lblWelcome.setVisible(false);
 				searchField.setVisible(true);
 				btnSearch.setVisible(true);
-<<<<<<< HEAD
+
 				comboBox.setVisible(true);		
 			}
 		});
-		
+
 		//Check account
 		mntmCheckAccount.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -575,7 +561,7 @@ public class MainPanel extends JFrame {
 				borrowerIDField.setVisible(true);
 			}
 		});
-		
+
 		//on click Submit for checking account
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -583,14 +569,14 @@ public class MainPanel extends JFrame {
 				bact.checkAccount(borrowerIDField.getText());
 			}
 		});
-		
+
 		//Place a hold
 		mntmPlaceAHold.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				//Add shit
 				lblWelcome.setVisible(false);
-				
+
 				if (searchField.isVisible())
 					searchField.setVisible(false);
 				if (btnSearch.isVisible())
@@ -613,16 +599,16 @@ public class MainPanel extends JFrame {
 				textField.setVisible(true);
 				textField_1.setVisible(true);
 				hold.setVisible(true);
-			
-				
-				
+
+
+
 			}
 		});
-		
+
 		//on click place a hold request
 		hold.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				try {
 					BorrowerActions baH = new BorrowerActions(con);
 					baH.placeHold(Integer.parseInt(textField_1.getText()), textField.getText());
@@ -633,14 +619,14 @@ public class MainPanel extends JFrame {
 				}
 			}
 		});
-		
+
 		//On click menu item pay a Fine
 		mntmPayAFine.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				if(lblWelcome.isVisible())
 					lblWelcome.setVisible(false);
-				
+
 				if (borrowerIDField.isVisible() && btnSubmit.isVisible() && lblEnterTheBorrower.isVisible())
 				{
 					borrowerIDField.setVisible(false);
@@ -661,15 +647,15 @@ public class MainPanel extends JFrame {
 					btnSearch.setVisible(false);
 				if (comboBox.isVisible())
 					comboBox.setVisible(false);
-				
+
 				lblEnterTheFid.setVisible(true);
 				payFine.setVisible(true);
 				pay.setVisible(true);
-				
-				
+
+
 			}
 		});
-		
+
 		//on click pay button
 		pay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -683,11 +669,7 @@ public class MainPanel extends JFrame {
 				}
 			}
 		});
-=======
-				comboBox.setVisible(true);
-
-			}
-		});
+		// comboBox.setVisible(true); TODO Check position of this combobox
 		/* Change window for Add Book */
 
 		mntmAddABook.addActionListener(new ActionListener() {
@@ -696,7 +678,7 @@ public class MainPanel extends JFrame {
 				lblBookBack.setVisible(true);
 				setAddBookVisible(true);
 				btnAddBook.setVisible(true);
-				lblCallNumber.setVisible(true);
+				lblABCallNumber.setVisible(true);
 				lblIsbn.setVisible(true);
 				lblBookTitle.setVisible(true);
 				lblMainAuthor.setVisible(true);
@@ -704,7 +686,7 @@ public class MainPanel extends JFrame {
 				lblYearPublished.setVisible(true);
 			}
 		});
-		
+
 		mntmPopularItems.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				lblWelcome.setVisible(false);
@@ -738,6 +720,5 @@ public class MainPanel extends JFrame {
 			AddBookpublisher.setVisible(false);
 			AddBookyear.setVisible(false);
 		}
->>>>>>> Added Add book visuals -- functionality to be implemented
 	}
 }
