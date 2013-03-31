@@ -25,3 +25,4 @@ drop table HasAuthor;
 drop table Borrower;
 drop table BorrowerType;
 drop table Book;
+

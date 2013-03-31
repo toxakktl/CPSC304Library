@@ -1,3 +1,4 @@
+
 create sequence bid_counter
 start with 1000
 increment by 1;
@@ -13,6 +14,8 @@ increment by 1;
 create sequence hid_counter
 start with 1000
 increment by 1;
+
+
 
 create table Book (
 callNumber varchar(20),
