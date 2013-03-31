@@ -16,6 +16,7 @@ import javax.swing.table.TableColumn;
 
 public class BorrowerActions {
 
+	//Fields for Borrower
 	Connection con;
 	Vector columnNames = new Vector();
 	Vector data = new Vector();
