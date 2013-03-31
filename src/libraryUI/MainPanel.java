@@ -58,7 +58,12 @@ public class MainPanel extends JFrame {
 	private JTextField AddBookauthor;
 	private JTextField AddBookpublisher;
 	private JTextField AddBookyear;
+<<<<<<< HEAD
 >>>>>>> Added Add book visuals -- functionality to be implemented
+=======
+	private JTextField GMPNum;
+	private JTextField GMPYear;
+>>>>>>> Added UI buttons for Generate Most Popular
 
 	/**
 	 * Launch the application.
@@ -261,7 +266,7 @@ public class MainPanel extends JFrame {
 		comboBox.setVisible(false);
 
 
-		// Components for Add book function (Librarian) TODO
+		// Components for Add book function (Librarian)
 
 		AddBookcallNumber = new JTextField();
 		AddBookcallNumber.setBounds(240, 45, 134, 28);
@@ -335,6 +340,39 @@ public class MainPanel extends JFrame {
 		btnAddBook.setVisible(false);
 		btnAddBook.setBounds(250, 230, 117, 29);
 		contentPane.add(btnAddBook);
+		// END ADD BOOK Components
+		// Generate Most popular (GMP) books components
+		final JLabel lblGMPNum = new JLabel("# of Books ");
+		lblGMPNum.setFont(new Font("Lucida Grande", Font.BOLD, 15));
+		lblGMPNum.setBounds(120, 105, 110, 19);
+		contentPane.add(lblGMPNum);
+
+		final JLabel lblGMPYear = new JLabel("From Year: ");
+		lblGMPYear.setFont(new Font("Lucida Grande", Font.BOLD, 15));
+		lblGMPYear.setBounds(120, 135, 110, 19);
+		contentPane.add(lblGMPYear);
+		
+		GMPNum = new JTextField();
+		GMPNum.setBounds(240, 105, 134, 28);
+		contentPane.add(GMPNum);
+		GMPNum.setColumns(10);
+
+		GMPYear = new JTextField();
+		GMPYear.setBounds(240, 135, 134, 28);
+		contentPane.add(GMPYear);
+		GMPYear.setColumns(10);
+		
+		final JButton btnGMP = new JButton("Get Top Books");
+		btnGMP.setVisible(false);
+		btnGMP.setBounds(250, 165, 117, 29);
+		contentPane.add(btnGMP);
+		
+		lblGMPNum.setVisible(false);
+		lblGMPYear.setVisible(false);
+		GMPNum.setVisible(false);
+		GMPYear.setVisible(false);
+		btnGMP.setVisible(false);
+		// END OF GENERATE MOST POPULAR COMPONENTS
 
 		// Sets Background for Add Book
 		final JLabel lblBookBack = new JLabel(new ImageIcon(ImageIO.read(new File("Images/book1.jpg"))));
@@ -344,10 +382,6 @@ public class MainPanel extends JFrame {
 		
 		btnAddBook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//				Library lib = new Library(con);
-				//				String dropDownItem = (String)comboBox.getSelectedItem();
-				//				String searchInputText = searchField.getText();
-				//				lib.borrowerActions(BORROWER_ACTIONS.SEARCH_BOOKS, searchInputText, dropDownItem);
 				LibrarianActions la = new LibrarianActions(con);
 				String cn = AddBookcallNumber.getText();
 				String isbn = AddBookisbn.getText();
@@ -460,7 +494,18 @@ public class MainPanel extends JFrame {
 =======
 =======
 		// Report N Most Popular for year Y (Components) -- (Librarian)
-		// TODO
+		btnGMP.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO implement getMostPopular()
+				lblWelcome.setVisible(true);
+				lblBookBack.setVisible(false);
+				btnGMP.setVisible(false);
+				lblGMPNum.setVisible(false);
+				lblGMPYear.setVisible(false);
+				GMPNum.setVisible(false);
+				GMPYear.setVisible(false);
+			}
+		});
 		
 >>>>>>> Generate checked out works on UI
 		// Sets Background -- MUST BE LAST to be background
@@ -657,6 +702,18 @@ public class MainPanel extends JFrame {
 				lblMainAuthor.setVisible(true);
 				lblPublisher.setVisible(true);
 				lblYearPublished.setVisible(true);
+			}
+		});
+		
+		mntmPopularItems.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				lblWelcome.setVisible(false);
+				lblBookBack.setVisible(true);
+				btnGMP.setVisible(true);
+				lblGMPNum.setVisible(true);
+				lblGMPYear.setVisible(true);
+				GMPNum.setVisible(true);
+				GMPYear.setVisible(true);
 			}
 		});
 

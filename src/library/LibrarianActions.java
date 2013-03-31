@@ -200,12 +200,14 @@ public class LibrarianActions extends UserActions {
 					"CREATE OR REPLACE VIEW top AS " +
 							"SELECT * FROM " +
 							"(SELECT callNumber, count(callNumber) as count " +
-							"FROM (SELECT * FROM Borrowing WHERE outdate LIKE '" + justYear + "%')" +
+							"FROM (SELECT * FROM Borrowing WHERE outdate LIKE '?%')" +
 							"GROUP BY callNumber) " +
-							"WHERE rownum <= " + nRows + " " +
+							"WHERE rownum <= ? " +
 							"ORDER BY count DESC; ";
 			getTop = con.prepareStatement(getTopString);
 
+			getTop.setString(2, nRows);
+			getTop.setString(1, justYear);
 			getTop.executeUpdate(); // update database
 
 			// Joins View TOP with table BOOK and grabs titles and counts
