@@ -43,21 +43,23 @@ import com.jgoodies.forms.factories.DefaultComponentFactory;
 public class MainPanel extends JFrame {
 
 	Connection con;
-	
+
 	private JPanel contentPane;
 	private JLabel backgroundLabel;
+	private JLabel lblBookBack;
+	private JLabel lblWelcome;
 	
 	private JTextField searchField;
 	private JComboBox comboBox;
 	private JComboBox comboBox_1;
-	
+
 	private JTextField borrowerIDField;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField payFine;
 
 	private final ClerkActions ca;
-	private final JLabel lblBorrId = new JLabel("Card ID:");
+	private final JLabel lblBorrId = new JLabel("Borrower ID:");
 	private final JTextField borIDField = new JTextField();
 	private final JLabel lblPassword = new JLabel("Password:");
 	private final JPasswordField passwordField = new JPasswordField();
@@ -76,14 +78,14 @@ public class MainPanel extends JFrame {
 	private final JSpinner spinner = new JSpinner();
 	private final JComboBox<String> userTypeComboBox;
 	private final JButton btnAddUser = new JButton("Submit");
-	
+
 	private final JLabel lblOnePerLine;
 	private final JLabel lblCallNumbers;
 	private final JLabel lblBorID2;
 	private final JTextField borIDField2;
 	private final JTextArea callNumbersField = new JTextArea();
 	private final JButton btnCheckOut;
-	
+
 	private final JLabel lblCallNumbers2;
 	private final JLabel lblCopyNumber;
 	private final JTextField callNumberField;
@@ -139,7 +141,7 @@ public class MainPanel extends JFrame {
 				lblUserType.setVisible(true);
 				lblAddress.setVisible(true);
 				addressField.setVisible(true);
-				//backgroundLabel.setVisible(true);
+				lblBookBack.setVisible(true);
 			}
 		});
 		mnClerk.add(mntmNewMenuItem);
@@ -151,11 +153,11 @@ public class MainPanel extends JFrame {
 				lblCallNumbers.setVisible(true);
 				lblBorID2.setVisible(true);
 				lblOnePerLine.setVisible(true);
-				
+
 				borIDField2.setVisible(true);
 				callNumbersField.setVisible(true);
 				btnCheckOut.setVisible(true);
-				//backgroundLabel.setVisible(true);
+				lblBookBack.setVisible(true);
 			}
 		});
 		mnClerk.add(mntmCheckOutItems);
@@ -166,11 +168,11 @@ public class MainPanel extends JFrame {
 				hideAll();
 				lblCallNumbers2.setVisible(true);
 				lblCopyNumber.setVisible(true);
-				
+
 				callNumberField.setVisible(true);
 				copyNumberField.setVisible(true);
 				btnCheckIn.setVisible(true);
-				//backgroundLabel.setVisible(true);
+				lblBookBack.setVisible(true);
 			}
 		});
 		mnClerk.add(mntmProcessAReturn);
@@ -179,6 +181,9 @@ public class MainPanel extends JFrame {
 		mntmCheckOverdueItems.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ca.listOverdue();
+				hideAll();
+				lblWelcome.setVisible(true);
+				backgroundLabel.setVisible(true);
 			}
 		});
 		mnClerk.add(mntmCheckOverdueItems);
@@ -225,7 +230,7 @@ public class MainPanel extends JFrame {
 		JMenu mnHelp = new JMenu("Help");
 		menuBar.add(mnHelp);
 
-		JMenuItem mntmInitialize = new JMenuItem("Initiliaze tables");
+		JMenuItem mntmInitialize = new JMenuItem("Initialize tables");
 		mntmInitialize.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ScriptRunner runner = new ScriptRunner(con, false, false);
@@ -299,7 +304,7 @@ public class MainPanel extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		final JLabel lblWelcome = DefaultComponentFactory.getInstance().createTitle("WELCOME");
+		lblWelcome = DefaultComponentFactory.getInstance().createTitle("WELCOME");
 		lblWelcome.setForeground(Color.WHITE);
 		lblWelcome.setFont(new Font("Arial", Font.BOLD, 63));
 		lblWelcome.setBounds(84, 86, 397, 110);
@@ -392,7 +397,7 @@ public class MainPanel extends JFrame {
 
 		final JLabel lblIsbn = new JLabel("ISBN");
 		lblIsbn.setFont(new Font("Lucida Grande", Font.BOLD, 15));
-		lblIsbn.setBounds(120, 75, 35, 19);
+		lblIsbn.setBounds(120, 75, 78, 19);
 		contentPane.add(lblIsbn);
 
 		final JLabel lblBookTitle = new JLabel("Book Title");
@@ -467,13 +472,6 @@ public class MainPanel extends JFrame {
 		GMPNum.setVisible(false);
 		GMPYear.setVisible(false);
 		btnGMP.setVisible(false);
-		// END OF GENERATE MOST POPULAR COMPONENTS
-
-		// Sets Background for Add Book
-		final JLabel lblBookBack = new JLabel(new ImageIcon(ImageIO.read(new File("Images/book1.jpg"))));
-		lblBookBack.setBounds(-2, -9, 502, 350);
-		contentPane.add(lblBookBack);
-		lblBookBack.setVisible(false);
 
 		btnAddBook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -487,8 +485,11 @@ public class MainPanel extends JFrame {
 				int y = Integer.parseInt(year);
 				la.addBook(cn, isbn, title, author, pub, y);
 				la.addCopy(cn, 0);
-
+				
+				hideAll();
 				lblWelcome.setVisible(true);
+				backgroundLabel.setVisible(true);
+				
 				lblBookBack.setVisible(false);
 				btnAddBook.setVisible(false);
 				setAddBookVisible(false);
@@ -591,8 +592,9 @@ public class MainPanel extends JFrame {
 				int x = la.countCopies(book);
 				// System.out.println(x);
 				la.addCopy(book, x);
-
+				hideAll();
 				lblWelcome.setVisible(true);
+				backgroundLabel.setVisible(true);
 				lblBookBack.setVisible(false);
 				AddBookcallNumber.setVisible(false);
 				lblABCallNumber.setVisible(false);
@@ -609,7 +611,9 @@ public class MainPanel extends JFrame {
 				int n = Integer.parseInt(GMPNum.getText());
 				int y = Integer.parseInt(GMPYear.getText());
 				la.generateMostPopularReport(n, y);
+				hideAll();
 				lblWelcome.setVisible(true);
+				backgroundLabel.setVisible(true);
 				lblBookBack.setVisible(false);
 				btnGMP.setVisible(false);
 				lblGMPNum.setVisible(false);
@@ -618,12 +622,6 @@ public class MainPanel extends JFrame {
 				GMPYear.setVisible(false);
 			}
 		});
-
-
-		// Sets Background -- MUST BE LAST to be background
-		backgroundLabel = new JLabel(new ImageIcon(ImageIO.read(new File("Images/library1.jpg"))));
-		backgroundLabel.setBounds(-2, -9, 502, 350);
-		contentPane.add(backgroundLabel);
 
 
 		// Changing window visibilities for functions
@@ -736,6 +734,7 @@ public class MainPanel extends JFrame {
 		// Add Copy Window change
 		mntmAddACopy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				hideAll();
 				lblWelcome.setVisible(false);
 				lblBookBack.setVisible(true);
 				AddBookcallNumber.setVisible(true);
@@ -747,6 +746,7 @@ public class MainPanel extends JFrame {
 
 		mntmAddABook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				hideAll();
 				lblWelcome.setVisible(false);
 				lblBookBack.setVisible(true);
 				setAddBookVisible(true);
@@ -762,6 +762,7 @@ public class MainPanel extends JFrame {
 
 		mntmPopularItems.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				hideAll();
 				lblWelcome.setVisible(false);
 				lblBookBack.setVisible(true);
 				btnGMP.setVisible(true);
@@ -772,60 +773,60 @@ public class MainPanel extends JFrame {
 			}
 		});
 		lblBorrId.setVisible(false);
-		
+
 		// CLERK ACTIONS STUFF
 
 		lblBorrId.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblBorrId.setBounds(27, 31, 76, 14);
 		contentPane.add(lblBorrId);
 		borIDField.setVisible(false);
-		
+
 		borIDField.setBounds(115, 27, 116, 22);
 		borIDField.setColumns(10);
 		contentPane.add(borIDField);
 		lblPassword.setVisible(false);
-		
+
 		lblPassword.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblPassword.setBounds(244, 75, 76, 16);
 		contentPane.add(lblPassword);
 		passwordField.setVisible(false);
-		
+
 		passwordField.setBounds(332, 71, 116, 20);
 		contentPane.add(passwordField);
 		lblUsername.setVisible(false);
-		
+
 		lblUsername.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblUsername.setBounds(27, 75, 76, 16);
 		contentPane.add(lblUsername);
 		lblEmail.setVisible(false);
-		
+
 		lblEmail.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblEmail.setBounds(27, 145, 76, 16);
 		contentPane.add(lblEmail);
 		lblSin.setVisible(false);
-		
+
 		lblSin.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblSin.setBounds(244, 145, 76, 16);
 		contentPane.add(lblSin);
-		
+
 		emailField = new JTextField();
 		emailField.setVisible(false);
 		emailField.setBounds(116, 139, 116, 22);
 		contentPane.add(emailField);
 		emailField.setColumns(10);
-		
+
 		sinField = new JTextField();
 		sinField.setVisible(false);
 		sinField.setBounds(332, 139, 116, 22);
 		contentPane.add(sinField);
 		sinField.setColumns(10);
-		
+
 		lblExpiryDate = new JLabel("Expiry Date:");
 		lblExpiryDate.setVisible(false);
 		lblExpiryDate.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblExpiryDate.setBounds(27, 178, 76, 16);
 		contentPane.add(lblExpiryDate);
-		
+
 		usernameField = new JTextField();
 		usernameField.setVisible(false);
 		usernameField.setBounds(116, 69, 116, 22);
@@ -836,15 +837,15 @@ public class MainPanel extends JFrame {
 		JSpinner.DateEditor de = new JSpinner.DateEditor(spinner, "dd/MM/yyyy");
 		spinner.setEditor(de);
 		spinner.setBounds(116, 174, 116, 20);
-		
+
 		contentPane.add(spinner);
-		
+
 		lblUserType = new JLabel("User Type:");
 		lblUserType.setVisible(false);
 		lblUserType.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblUserType.setBounds(244, 178, 76, 16);
 		contentPane.add(lblUserType);
-		
+
 		userTypeComboBox = new JComboBox<String>();
 		userTypeComboBox.setVisible(false);
 		userTypeComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Student", "Faculty", "Staff"}));
@@ -854,108 +855,133 @@ public class MainPanel extends JFrame {
 		btnAddUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ca.addBorrower(borIDField.getText(), passwordField.getText(), usernameField.getText(), addressField.getText(), phoneField.getText(), emailField.getText(), sinField.getText(), (Date) spinner.getValue(), (String) userTypeComboBox.getSelectedItem());
+				hideAll();
+				lblWelcome.setVisible(true);
+				backgroundLabel.setVisible(true);
 			}
 		});
 		btnAddUser.setBounds(376, 254, 95, 25);
-		
+
 		contentPane.add(btnAddUser);
-		
+
 		lblPhone = new JLabel("Phone:");
 		lblPhone.setVisible(false);
 		lblPhone.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblPhone.setBounds(244, 110, 76, 14);
 		contentPane.add(lblPhone);
-		
+
 		phoneField = new JTextField();
 		phoneField.setVisible(false);
 		phoneField.setBounds(332, 104, 116, 20);
 		contentPane.add(phoneField);
 		phoneField.setColumns(10);
-		
+
 		lblAddress = new JLabel("Address:");
 		lblAddress.setVisible(false);
 		lblAddress.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblAddress.setBounds(27, 110, 76, 14);
 		contentPane.add(lblAddress);
-		
+
 		addressField = new JTextField();
 		addressField.setVisible(false);
 		addressField.setBounds(116, 104, 116, 20);
 		contentPane.add(addressField);
 		addressField.setColumns(10);
-		
+
 		// stuff for check out
-		
-		lblBorID2 = new JLabel("Card ID:");
+
+		lblBorID2 = new JLabel("Borrower ID:");
 		lblBorID2.setVisible(false);
-		lblBorID2.setBounds(12, 13, 46, 14);
+		lblBorID2.setBounds(12, 13, 107, 14);
 		contentPane.add(lblBorID2);
-		
+
 		borIDField2 = new JTextField();
 		borIDField2.setVisible(false);
 		borIDField2.setBounds(115, 11, 86, 20);
 		contentPane.add(borIDField2);
 		borIDField2.setColumns(10);
-		
+
 		lblCallNumbers = new JLabel("Call Numbers:");
 		lblCallNumbers.setBounds(12, 40, 95, 14);
+		lblCallNumbers.setVisible(false);
 		contentPane.add(lblCallNumbers);
+		
 		callNumbersField.setVisible(false);
 		callNumbersField.setBounds(115, 40, 356, 206);
-		
+
 		contentPane.add(callNumbersField);
-		
+
 		btnCheckOut = new JButton("Check Out");
 		btnCheckOut.setVisible(false);
 		btnCheckOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ca.checkOut(borIDField2.getText(), callNumbersField.getText().split("\n"));
+				hideAll();
+				lblWelcome.setVisible(true);
+				backgroundLabel.setVisible(true);
 			}
 		});
 		btnCheckOut.setBounds(376, 260, 95, 25);
 		contentPane.add(btnCheckOut);
-		
+
 		lblOnePerLine = new JLabel("(One Per Line)");
 		lblOnePerLine.setVisible(false);
 		lblOnePerLine.setBounds(12, 55, 95, 14);
 		contentPane.add(lblOnePerLine);
-		
+
 		// stuff for check in
-		
+
 		lblCallNumbers2 = new JLabel("Call Number:");
 		lblCallNumbers2.setVisible(false);
 		lblCallNumbers2.setBounds(105, 54, 86, 14);
 		contentPane.add(lblCallNumbers2);
-		
+
 		callNumberField = new JTextField();
 		callNumberField.setVisible(false);
 		callNumberField.setBounds(203, 48, 171, 20);
 		contentPane.add(callNumberField);
 		callNumberField.setColumns(10);
-		
+
 		lblCopyNumber = new JLabel("Copy Number:");
 		lblCopyNumber.setVisible(false);
 		lblCopyNumber.setBounds(105, 84, 86, 14);
 		contentPane.add(lblCopyNumber);
-		
+
 		copyNumberField = new JTextField();
 		copyNumberField.setVisible(false);
 		copyNumberField.setBounds(203, 78, 171, 20);
 		contentPane.add(copyNumberField);
 		copyNumberField.setColumns(10);
-		
+
 		btnCheckIn = new JButton("Check In");
 		btnCheckIn.setVisible(false);
 		btnCheckIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ca.checkIn(callNumberField.getText(), copyNumberField.getText());
+				hideAll();
+				lblWelcome.setVisible(true);
+				backgroundLabel.setVisible(true);
 			}
 		});
 		btnCheckIn.setBounds(203, 137, 95, 25);
 		contentPane.add(btnCheckIn);
+		// END OF GENERATE MOST POPULAR COMPONENTS
+
+		// Sets Background for Add Book
+		lblBookBack = new JLabel(new ImageIcon(ImageIO.read(new File("Images/book1.jpg"))));
+		lblBookBack.setBounds(-2, -9, 502, 350);
+		contentPane.add(lblBookBack);
+		lblBookBack.setVisible(false);
+
+
+		// Sets Background -- MUST BE LAST to be background
+		backgroundLabel = new JLabel(new ImageIcon(ImageIO.read(new File("Images/library1.jpg"))));
+		backgroundLabel.setBounds(-2, -9, 502, 350);
+		contentPane.add(backgroundLabel);
 	}
 
 	private void setAddBookVisible(boolean b){
+		hideAll();
 		if (b){
 			AddBookcallNumber.setVisible(true);
 			AddBookisbn.setVisible(true);
@@ -963,22 +989,14 @@ public class MainPanel extends JFrame {
 			AddBookauthor.setVisible(true);
 			AddBookpublisher.setVisible(true);
 			AddBookyear.setVisible(true);
-
-		}
-		else {
-			AddBookcallNumber.setVisible(false);
-			AddBookisbn.setVisible(false);
-			AddBooktitle.setVisible(false);
-			AddBookauthor.setVisible(false);
-			AddBookpublisher.setVisible(false);
-			AddBookyear.setVisible(false);
+			lblBookBack.setVisible(true);
 		}
 	}
-	
+
 	private void hideAll() {
 		for (Component c : contentPane.getComponents()) {
 			c.setVisible(false);
 		}
-		//backgroundLabel.setVisible(true);
+		//lblBookBack.setVisible(true);
 	}
 }

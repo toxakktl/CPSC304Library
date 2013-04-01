@@ -16,7 +16,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 public class ClerkActions extends UserActions {
-
+	// OUTDATE IS DUE DATE!
+	
 	public ClerkActions(Connection c) {
 		super(c);
 	}
@@ -106,8 +107,8 @@ public class ClerkActions extends UserActions {
 				ps.setInt(1, Integer.parseInt(bid));
 				ps.setString(2, callNumber);
 				ps.setString(3, copyNo);
-				ps.setDate(4, outDate);
-				ps.setDate(5, dueDate);
+				ps.setDate(4, dueDate);
+				ps.setDate(5, null);
 
 				ps.executeUpdate();
 				con.commit();
@@ -136,10 +137,10 @@ public class ClerkActions extends UserActions {
 	public void checkIn(String callNumber, String copyNo) {
 		try {
 			// check if item is late
-			PreparedStatement lateSearch = con.prepareStatement("SELECT bid, inDate FROM Borrowing WHERE callNumber = '" + callNumber + "' AND copyNo = '" + copyNo + "'");
+			PreparedStatement lateSearch = con.prepareStatement("SELECT bid, outDate, inDate FROM Borrowing WHERE callNumber = '" + callNumber + "' AND copyNo = '" + copyNo + "'");
 			ResultSet lateResult = lateSearch.executeQuery();
 			lateResult.next();
-			java.util.Date dueDate = lateResult.getDate("inDate");
+			java.util.Date dueDate = lateResult.getDate("outDate");
 			if (new java.util.Date().after(dueDate)) {
 				// today is after the due date; item is overdue. Fine the borrower
 				PreparedStatement fine = con.prepareStatement("INSERT INTO fine VALUES (fineid_counter.nextval,?,?,NULL,?)");
@@ -172,7 +173,8 @@ public class ClerkActions extends UserActions {
 			con.commit();
 			checkIn.close();
 
-			PreparedStatement upDateBorrowing = con.prepareStatement("UPDATE Borrowing SET outDate = NULL WHERE callNumber = '" + callNumber + "' AND copyNo = '" + copyNo + "'");
+			PreparedStatement upDateBorrowing = con.prepareStatement("UPDATE Borrowing SET inDate = ? WHERE callNumber = '" + callNumber + "' AND copyNo = '" + copyNo + "'");
+			upDateBorrowing.setDate(1, new java.sql.Date(System.currentTimeMillis()));
 			upDateBorrowing.executeUpdate();
 			con.commit();
 			upDateBorrowing.close();
@@ -191,7 +193,7 @@ public class ClerkActions extends UserActions {
 
 	public void listOverdue() {
 		try {
-			PreparedStatement overdueSearch = con.prepareStatement("SELECT * FROM borrowing WHERE ? > inDate AND outDate IS NOT NULL");
+			PreparedStatement overdueSearch = con.prepareStatement("SELECT * FROM borrowing WHERE ? > outDate AND inDate IS NULL");
 			overdueSearch.setDate(1, new java.sql.Date(System.currentTimeMillis()));
 			ResultSet overdueResult = overdueSearch.executeQuery();
 
