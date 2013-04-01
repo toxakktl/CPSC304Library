@@ -9,6 +9,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -25,6 +28,7 @@ import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import library.BorrowerActions;
+import library.ClerkActions;
 import library.LibrarianActions;
 import library.Library;
 import library.Library.BORROWER_ACTIONS;
@@ -91,15 +95,34 @@ public class MainPanel extends JFrame {
 		menuBar.add(mnClerk);
 
 		JMenuItem mntmNewMenuItem = new JMenuItem("Add Borrower");
+		// TODO ADD GUI FOR THIS FUNCTION
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ClerkActions ca = new ClerkActions(con);
+				Date dt = new Date();
+				ca.addBorrower("1234", "pass1234", "tester", "srsly st.", "7787777777", "a@a.com", "1234567", dt, "Student");
+			}
+		});
 		mnClerk.add(mntmNewMenuItem);
 
 		JMenuItem mntmCheckOutItems = new JMenuItem("Check out items");
+		mntmCheckOutItems.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//				ClerkActions ca = new ClerkActions(con); TODO
+				//				List<String> books = new ArrayList();
+				//				books.add("DS778.M3 T87");
+				//				books.add("PL2960.U826 C36");
+				//				ca.checkOut("1234", books);
+			}
+		});
 		mnClerk.add(mntmCheckOutItems);
 
 		JMenuItem mntmProcessAReturn = new JMenuItem("Process a return");
+		// TODO TEST AND GUI
 		mnClerk.add(mntmProcessAReturn);
 
 		JMenuItem mntmCheckOverdueItems = new JMenuItem("Check overdue items");
+		// TODO TEST AND GUI
 		mnClerk.add(mntmCheckOverdueItems);
 
 		JMenu mnBorrower = new JMenu("Borrower");
@@ -508,7 +531,7 @@ public class MainPanel extends JFrame {
 		btnSearch.setVisible(false);
 
 		//Search
-		// Add Copy Button -- (Librarian) TODO
+		// Add Copy Button -- (Librarian)
 		btnAddCopy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				LibrarianActions la = new LibrarianActions(con);
@@ -516,13 +539,13 @@ public class MainPanel extends JFrame {
 				int x = la.countCopies(book);
 				// System.out.println(x);
 				la.addCopy(book, x);
-				
+
 				lblWelcome.setVisible(true);
 				lblBookBack.setVisible(false);
 				AddBookcallNumber.setVisible(false);
 				lblABCallNumber.setVisible(false);
 				btnAddCopy.setVisible(false);
-				
+
 			}
 		});
 
@@ -620,7 +643,7 @@ public class MainPanel extends JFrame {
 				BorrowerActions bact = new BorrowerActions(con);
 				String dropDownItem = (String)comboBox_1.getSelectedItem();
 				bact.checkAccount(borrowerIDField.getText(), dropDownItem);
-				
+
 				lblWelcome.setVisible(true);
 
 				comboBox_1.setVisible(false);
@@ -743,7 +766,7 @@ public class MainPanel extends JFrame {
 				pay.setVisible(false);
 			}
 		});
-		// comboBox.setVisible(true); TODO Check position of this combobox
+
 
 		// Add Copy Window change
 		mntmAddACopy.addActionListener(new ActionListener() {

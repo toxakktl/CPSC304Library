@@ -22,18 +22,19 @@ public class ClerkActions extends UserActions {
 		super(c);
 	}
 
-	public void addBorrower(String bid, String password, String username, String phone,
+	public void addBorrower(String bid, String password, String username, String address, String phone,
 			String email, String sin, java.util.Date expiry, String type) {
 		try {
-			PreparedStatement ps = con.prepareStatement("INSERT INTO borrowers VALUES (?,?,?,?,?,?,?,?)");
+			PreparedStatement ps = con.prepareStatement("INSERT INTO borrower VALUES (?,?,?,?,?,?,?,?,?)");
 			ps.setInt(1, Integer.parseInt(bid));
 			ps.setString(2, password);
 			ps.setString(3, username);
-			ps.setString(4, phone);
-			ps.setString(4, email);
-			ps.setInt(5, Integer.parseInt(sin));
-			ps.setDate(6, new java.sql.Date(expiry.getTime()));
-			ps.setString(7, type);
+			ps.setString(4, address);
+			ps.setString(5, phone);
+			ps.setString(6, email);
+			ps.setInt(7, Integer.parseInt(sin));
+			ps.setDate(8, new java.sql.Date(expiry.getTime()));
+			ps.setString(9, type);
 
 			ps.executeUpdate();
 			con.commit();
