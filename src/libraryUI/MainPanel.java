@@ -207,6 +207,24 @@ public class MainPanel extends JFrame {
 		});
 		mnHelp.add(mntmDelete);
 
+		JMenuItem mntmShowBookCopies = new JMenuItem("Show all books in library");
+		mntmShowBookCopies.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				LibrarianActions la = new LibrarianActions(con);
+				la.showAllBookCopies();
+			}
+		});
+		mnHelp.add(mntmShowBookCopies);
+		
+		JMenuItem mntmShowBorrowers = new JMenuItem("Show all borrowers");
+		mntmShowBorrowers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				LibrarianActions la = new LibrarianActions(con);
+				la.showAllBorrowers();
+			}
+		});
+		mnHelp.add(mntmShowBorrowers);
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 150, 150));
 		setContentPane(contentPane);
@@ -255,7 +273,7 @@ public class MainPanel extends JFrame {
 		contentPane.add(comboBox);
 
 		comboBox.setVisible(false);
-		
+
 		comboBox_1 = new JComboBox();
 		comboBox_1.addItem("Not returned");
 		comboBox_1.addItem("Fines");
@@ -548,7 +566,7 @@ public class MainPanel extends JFrame {
 		mntmCheckAccount.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				lblWelcome.setVisible(false);
-				
+
 				if (searchField.isVisible())
 					searchField.setVisible(false);
 				if (btnSearch.isVisible())

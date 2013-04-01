@@ -263,6 +263,129 @@ public class LibrarianActions extends UserActions {
 		}
 
 	}
+	
+	// THE FOLLOWING FUNCTIONS ARE JUST FOR DEMO/DEBUGGING PURPOSES
+	public void showAllBookCopies(){
+		PreparedStatement ps = null;
+		try{
+			ps = con.prepareStatement("SELECT title, bookcopy.callnumber, copyNo, status " +
+										"from BookCopy JOIN Book ON Book.callNumber = BookCopy.callNumber " +
+										"ORDER BY callNumber");
+
+
+			// produce view
+			ResultSet resultSearch = ps.executeQuery();
+			ResultSetMetaData rsmd = ps.getMetaData();
+
+
+			// create table panel
+			int numCols = rsmd.getColumnCount();
+			for (int i = 0; i < numCols; i++) {
+				// get column name and print it
+				columnNames.addElement(rsmd.getColumnName(i+1));
+				System.out.printf("%-15s", rsmd.getColumnName(i + 1));
+			}
+
+			while (resultSearch.next()) {
+				Vector row = new Vector(numCols);
+				for (int i = 1; i <= numCols; i++) {
+					row.addElement(resultSearch.getObject(i));
+				}
+				data.addElement(row);
+
+			}
+
+
+			resultSearch.close();
+			JTable table = new JTable(data, columnNames);
+			TableColumn column;
+			for (int i = 0; i < table.getColumnCount(); i++) {
+				column = table.getColumnModel().getColumn(i);
+				column.setMaxWidth(250);
+			}
+			JScrollPane scrollPane = new JScrollPane(table);
+			panel.add(scrollPane);               
+			JFrame frame = new JFrame();
+			frame.add(panel);         //adding panel to the frame
+			frame.setSize(600, 400); //setting frame size
+			frame.setVisible(true);
+
+			// commit work
+			con.commit();
+			ps.close();
+
+		} catch (SQLException ex) {
+			System.out.println("Message: " + ex.getMessage());
+			try {
+				// undo the insert
+				con.rollback();
+			} catch (SQLException ex2) {
+				System.out.println("Message: " + ex2.getMessage());
+				System.exit(-1);
+			}
+		}
+	}
+	
+	public void showAllBorrowers(){
+		PreparedStatement ps = null;
+		try{
+			ps = con.prepareStatement("SELECT bid, password, name " +
+										"from Borrower " +
+										"ORDER BY bid");
+
+
+			// produce view
+			ResultSet resultSearch = ps.executeQuery();
+			ResultSetMetaData rsmd = ps.getMetaData();
+
+
+			// create table panel
+			int numCols = rsmd.getColumnCount();
+			for (int i = 0; i < numCols; i++) {
+				// get column name and print it
+				columnNames.addElement(rsmd.getColumnName(i+1));
+				System.out.printf("%-15s", rsmd.getColumnName(i + 1));
+			}
+
+			while (resultSearch.next()) {
+				Vector row = new Vector(numCols);
+				for (int i = 1; i <= numCols; i++) {
+					row.addElement(resultSearch.getObject(i));
+				}
+				data.addElement(row);
+
+			}
+
+
+			resultSearch.close();
+			JTable table = new JTable(data, columnNames);
+			TableColumn column;
+			for (int i = 0; i < table.getColumnCount(); i++) {
+				column = table.getColumnModel().getColumn(i);
+				column.setMaxWidth(250);
+			}
+			JScrollPane scrollPane = new JScrollPane(table);
+			panel.add(scrollPane);               
+			JFrame frame = new JFrame();
+			frame.add(panel);         //adding panel to the frame
+			frame.setSize(600, 400); //setting frame size
+			frame.setVisible(true);
+
+			// commit work
+			con.commit();
+			ps.close();
+
+		} catch (SQLException ex) {
+			System.out.println("Message: " + ex.getMessage());
+			try {
+				// undo the insert
+				con.rollback();
+			} catch (SQLException ex2) {
+				System.out.println("Message: " + ex2.getMessage());
+				System.exit(-1);
+			}
+		}
+	}
 }
 
 
