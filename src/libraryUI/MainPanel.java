@@ -39,6 +39,7 @@ public class MainPanel extends JFrame {
 	private JPanel contentPane;
 	private JTextField searchField;
 	private JComboBox comboBox;
+	private JComboBox comboBox_1;
 	Connection con;
 	private JTextField borrowerIDField;
 	private JTextField textField;
@@ -228,14 +229,11 @@ public class MainPanel extends JFrame {
 		final JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Library lib = new Library(con);
 				BorrowerActions bActions = new BorrowerActions(con);
 				String dropDownItem = (String)comboBox.getSelectedItem();
 				String searchInputText = searchField.getText();
 
 				bActions.searchBooks(searchInputText, dropDownItem);	
-
-				lib.borrowerActions(BORROWER_ACTIONS.SEARCH_BOOKS, searchInputText, dropDownItem);
 				lblWelcome.setVisible(true);
 				searchField.setVisible(false);
 				btnSearch.setVisible(false);
@@ -252,11 +250,20 @@ public class MainPanel extends JFrame {
 		comboBox.addItem("Title");
 		comboBox.addItem("Author");
 		comboBox.addItem("Subject");
-		comboBox.getItemAt(0);
+		//comboBox.getItemAt(0);
 		comboBox.setBounds(6, 22, 96, 27);
 		contentPane.add(comboBox);
 
 		comboBox.setVisible(false);
+		
+		comboBox_1 = new JComboBox();
+		comboBox_1.addItem("Not returned");
+		comboBox_1.addItem("Fines");
+		comboBox_1.addItem("Hold requests");
+		comboBox_1.setBounds(16, 61, 103, 27);
+		contentPane.add(comboBox_1);
+		comboBox_1.setVisible(false);
+
 
 
 		// Components for Add book function (Librarian)
@@ -410,14 +417,14 @@ public class MainPanel extends JFrame {
 		lblEnterTheBorrower.setVisible(false);
 
 		borrowerIDField = new JTextField();
-		borrowerIDField.setBounds(17, 60, 134, 28);
+		borrowerIDField.setBounds(120, 60, 134, 28);
 		contentPane.add(borrowerIDField);
 		borrowerIDField.setColumns(10);
 		borrowerIDField.setVisible(false);
 
 		final JButton btnSubmit = new JButton("Submit");
 
-		btnSubmit.setBounds(151, 60, 117, 29);
+		btnSubmit.setBounds(251, 60, 117, 29);
 		contentPane.add(btnSubmit);
 
 
@@ -483,7 +490,7 @@ public class MainPanel extends JFrame {
 		// Report N Most Popular for year Y (Components) -- (Librarian)
 		btnGMP.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO implement getMostPopular()
+
 				LibrarianActions la = new LibrarianActions(con);
 				int n = Integer.parseInt(GMPNum.getText());
 				int y = Integer.parseInt(GMPYear.getText());
@@ -503,7 +510,6 @@ public class MainPanel extends JFrame {
 		JLabel lblNewLabel = new JLabel(new ImageIcon(ImageIO.read(new File("Images/library1.jpg"))));
 		lblNewLabel.setBounds(-2, -9, 502, 350);
 		contentPane.add(lblNewLabel);
-
 
 
 		// Changing window visibilities for functions
@@ -530,6 +536,7 @@ public class MainPanel extends JFrame {
 					payFine.setVisible(false);
 				}
 				lblWelcome.setVisible(false);
+				comboBox_1.setVisible(false);
 				searchField.setVisible(true);
 				btnSearch.setVisible(true);
 
@@ -541,6 +548,7 @@ public class MainPanel extends JFrame {
 		mntmCheckAccount.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				lblWelcome.setVisible(false);
+				
 				if (searchField.isVisible())
 					searchField.setVisible(false);
 				if (btnSearch.isVisible())
@@ -560,6 +568,7 @@ public class MainPanel extends JFrame {
 					pay.setVisible(false);
 					payFine.setVisible(false);
 				}
+				comboBox_1.setVisible(true);
 				lblEnterTheBorrower.setVisible(true);
 				btnSubmit.setVisible(true);
 				borrowerIDField.setVisible(true);
@@ -570,7 +579,8 @@ public class MainPanel extends JFrame {
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				BorrowerActions bact = new BorrowerActions(con);
-				bact.checkAccount(borrowerIDField.getText());
+				String dropDownItem = (String)comboBox_1.getSelectedItem();
+				bact.checkAccount(borrowerIDField.getText(), dropDownItem);
 			}
 		});
 
@@ -580,6 +590,7 @@ public class MainPanel extends JFrame {
 
 				//Add shit
 				lblWelcome.setVisible(false);
+				comboBox_1.setVisible(false);
 
 				if (searchField.isVisible())
 					searchField.setVisible(false);
@@ -627,6 +638,7 @@ public class MainPanel extends JFrame {
 		//On click menu item pay a Fine
 		mntmPayAFine.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				comboBox_1.setVisible(false);
 
 				if(lblWelcome.isVisible())
 					lblWelcome.setVisible(false);
