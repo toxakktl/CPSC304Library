@@ -72,14 +72,15 @@ public class LibrarianActions extends UserActions {
 	//	1 = callNumber (MUST ALREADY EXIST)
 	//	2 = isbn
 	//	3 = status
-	public void addCopy(String callNumber, String copyNo) {
+	public void addCopy(String callNumber, int copyNo) {
 		PreparedStatement ps = null;
-		String status = "IN";
+		String status = "in";
+		int thisCopy = copyNo + 1;
 		try{
-			ps = con.prepareStatement("INSERT INTO BookCopy VALUES (?,?,?)");
+			ps = con.prepareStatement("INSERT INTO BookCopy VALUES (?,('C' || ?),?)");
 
 			ps.setString(1, callNumber);
-			ps.setString(2, copyNo); // Should Increment TODO ex. C1, C2, C3... etc.
+			ps.setInt(2, thisCopy); // Should Increment TODO ex. C1, C2, C3... etc.
 			ps.setString(3, status); // All Book Copies are set to "IN" status
 
 			// update the database
@@ -262,6 +263,30 @@ public class LibrarianActions extends UserActions {
 			}
 		}
 
+	}
+	
+	public int countCopies(String bookCopy){
+		PreparedStatement ps = null;
+		int count = 0;
+		try {
+			ps = con.prepareStatement("SELECT COUNT(*) AS rowcount FROM BookCopy WHERE " +
+										"callNumber LIKE ?");
+			ps.setString(1, bookCopy);
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			
+			count = rs.getInt(1);
+		} catch (SQLException ex) {
+			System.out.println("Message: " + ex.getMessage());
+			try {
+				// undo the insert
+				con.rollback();
+			} catch (SQLException ex2) {
+				System.out.println("Message: " + ex2.getMessage());
+				System.exit(-1);
+			}
+		}
+		return count;
 	}
 	
 	// THE FOLLOWING FUNCTIONS ARE JUST FOR DEMO/DEBUGGING PURPOSES

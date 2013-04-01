@@ -145,12 +145,6 @@ public class MainPanel extends JFrame {
 		mnLibrarian.add(mntmReportBooks);
 
 		JMenuItem mntmPopularItems = new JMenuItem("Popular items");
-		mntmPopularItems.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				LibrarianActions la = new LibrarianActions(con);
-				// la.generateMostPopularReport(n, y)
-			}
-		});
 		mnLibrarian.add(mntmPopularItems);
 
 		JMenu mnHelp = new JMenu("Help");
@@ -215,7 +209,7 @@ public class MainPanel extends JFrame {
 			}
 		});
 		mnHelp.add(mntmShowBookCopies);
-		
+
 		JMenuItem mntmShowBorrowers = new JMenuItem("Show all borrowers");
 		mntmShowBorrowers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -359,6 +353,14 @@ public class MainPanel extends JFrame {
 		btnAddBook.setBounds(250, 230, 117, 29);
 		contentPane.add(btnAddBook);
 		// END ADD BOOK Components
+
+		// Add Copy Components -- Uses from Add Book components
+		final JButton btnAddCopy = new JButton("Add Copy");
+		btnAddCopy.setVisible(false);
+		btnAddCopy.setBounds(250, 230, 117, 29);
+		contentPane.add(btnAddCopy);
+
+		// END ADD COPY Components
 		// Generate Most popular (GMP) books components
 		final JLabel lblGMPNum = new JLabel("# of Books ");
 		lblGMPNum.setFont(new Font("Lucida Grande", Font.BOLD, 15));
@@ -409,6 +411,7 @@ public class MainPanel extends JFrame {
 				String year = AddBookyear.getText();
 				int y = Integer.parseInt(year);
 				la.addBook(cn, isbn, title, author, pub, y);
+				la.addCopy(cn, 0);
 
 				lblWelcome.setVisible(true);
 				lblBookBack.setVisible(false);
@@ -505,6 +508,24 @@ public class MainPanel extends JFrame {
 		btnSearch.setVisible(false);
 
 		//Search
+		// Add Copy Button -- (Librarian) TODO
+		btnAddCopy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LibrarianActions la = new LibrarianActions(con);
+				String book = AddBookcallNumber.getText();
+				int x = la.countCopies(book);
+				// System.out.println(x);
+				la.addCopy(book, x);
+				
+				lblWelcome.setVisible(true);
+				lblBookBack.setVisible(false);
+				AddBookcallNumber.setVisible(false);
+				lblABCallNumber.setVisible(false);
+				btnAddCopy.setVisible(false);
+				
+			}
+		});
+
 		// Report N Most Popular for year Y (Components) -- (Librarian)
 		btnGMP.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -704,6 +725,17 @@ public class MainPanel extends JFrame {
 			}
 		});
 		// comboBox.setVisible(true); TODO Check position of this combobox
+
+		// Add Copy Window change
+		mntmAddACopy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				lblWelcome.setVisible(false);
+				lblBookBack.setVisible(true);
+				AddBookcallNumber.setVisible(true);
+				lblABCallNumber.setVisible(true);
+				btnAddCopy.setVisible(true);
+			}
+		});
 		/* Change window for Add Book */
 
 		mntmAddABook.addActionListener(new ActionListener() {
