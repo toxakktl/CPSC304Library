@@ -1,7 +1,10 @@
 package libraryUI;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,48 +12,83 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JMenu;
-import javax.swing.JLabel;
-import com.jgoodies.forms.factories.DefaultComponentFactory;
-import java.awt.Font;
-import java.awt.Color;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+
 import library.BorrowerActions;
 import library.ClerkActions;
 import library.LibrarianActions;
-import library.Library;
-import library.Library.BORROWER_ACTIONS;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
+
+import com.jgoodies.forms.factories.DefaultComponentFactory;
 
 public class MainPanel extends JFrame {
 
+	Connection con;
+	
 	private JPanel contentPane;
+	private JLabel backgroundLabel;
+	
 	private JTextField searchField;
 	private JComboBox comboBox;
 	private JComboBox comboBox_1;
-	Connection con;
+	
 	private JTextField borrowerIDField;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField payFine;
 
-
+	private final ClerkActions ca;
+	private final JLabel lblBorrId = new JLabel("Card ID:");
+	private final JTextField borIDField = new JTextField();
+	private final JLabel lblPassword = new JLabel("Password:");
+	private final JPasswordField passwordField = new JPasswordField();
+	private final JLabel lblUsername = new JLabel("Name:");
+	private final JLabel lblEmail = new JLabel("Email:");
+	private final JLabel lblSin = new JLabel("SIN:");
+	private final JLabel lblPhone;
+	private final JLabel lblExpiryDate;
+	private final JLabel lblUserType;
+	private final JLabel lblAddress;
+	private final JTextField addressField;
+	private final JTextField emailField;
+	private final JTextField sinField;
+	private final JTextField usernameField;
+	private final JTextField phoneField;
+	private final JSpinner spinner = new JSpinner();
+	private final JComboBox<String> userTypeComboBox;
+	private final JButton btnAddUser = new JButton("Submit");
+	
+	private final JLabel lblOnePerLine;
+	private final JLabel lblCallNumbers;
+	private final JLabel lblBorID2;
+	private final JTextField borIDField2;
+	private final JTextArea callNumbersField = new JTextArea();
+	private final JButton btnCheckOut;
+	
+	private final JLabel lblCallNumbers2;
+	private final JLabel lblCopyNumber;
+	private final JTextField callNumberField;
+	private final JTextField copyNumberField;
+	private final JButton btnCheckIn;
 
 	private JTextField AddBookcallNumber;
 	private JTextField AddBookisbn;
@@ -62,28 +100,12 @@ public class MainPanel extends JFrame {
 	private JTextField GMPNum;
 	private JTextField GMPYear;
 
-
-	/**
-	 * Launch the application.
-	 */
-	//	public static void main(String[] args) {
-	//		EventQueue.invokeLater(new Runnable() {
-	//			public void run() {
-	//				try {
-	//					MainPanel frame = new MainPanel();
-	//					frame.setVisible(true);
-	//				} catch (Exception e) {
-	//					e.printStackTrace();
-	//				}
-	//			}
-	//		});
-	//	}
-
 	/**
 	 * Create the frame.
 	 * @throws IOException 
 	 */
 	public MainPanel(final Connection con) throws IOException {
+		ca = new ClerkActions(con);
 		this.con = con;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 499, 355);
@@ -95,46 +117,76 @@ public class MainPanel extends JFrame {
 		menuBar.add(mnClerk);
 
 		JMenuItem mntmNewMenuItem = new JMenuItem("Add Borrower");
-		// TODO ADD GUI FOR THIS FUNCTION
 		mntmNewMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ClerkActions ca = new ClerkActions(con);
-				Date dt = new Date();
-				ca.addBorrower("1234", "pass1234", "tester", "srsly st.", "7787777777", "a@a.com", "1234567", dt, "Student");
+				hideAll();
+				lblBorrId.setVisible(true);
+				borIDField.setVisible(true);
+				lblPassword.setVisible(true);
+				passwordField.setVisible(true);
+				lblUsername.setVisible(true);
+				lblEmail.setVisible(true);
+				lblSin.setVisible(true);
+				phoneField.setVisible(true);
+				emailField.setVisible(true);
+				sinField.setVisible(true);
+				usernameField.setVisible(true);
+				spinner.setVisible(true);
+				userTypeComboBox.setVisible(true);
+				btnAddUser.setVisible(true);
+				lblPhone.setVisible(true);
+				lblExpiryDate.setVisible(true);
+				lblUserType.setVisible(true);
+				lblAddress.setVisible(true);
+				addressField.setVisible(true);
+				//backgroundLabel.setVisible(true);
 			}
 		});
 		mnClerk.add(mntmNewMenuItem);
 
 		JMenuItem mntmCheckOutItems = new JMenuItem("Check out items");
 		mntmCheckOutItems.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				//				ClerkActions ca = new ClerkActions(con); TODO
-				//				List<String> books = new ArrayList();
-				//				books.add("DS778.M3 T87");
-				//				books.add("PL2960.U826 C36");
-				//				ca.checkOut("1234", books);
+			public void actionPerformed(ActionEvent e) {
+				hideAll();
+				lblCallNumbers.setVisible(true);
+				lblBorID2.setVisible(true);
+				lblOnePerLine.setVisible(true);
+				
+				borIDField2.setVisible(true);
+				callNumbersField.setVisible(true);
+				btnCheckOut.setVisible(true);
+				//backgroundLabel.setVisible(true);
 			}
 		});
 		mnClerk.add(mntmCheckOutItems);
 
 		JMenuItem mntmProcessAReturn = new JMenuItem("Process a return");
-		// TODO TEST AND GUI
+		mntmProcessAReturn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				hideAll();
+				lblCallNumbers2.setVisible(true);
+				lblCopyNumber.setVisible(true);
+				
+				callNumberField.setVisible(true);
+				copyNumberField.setVisible(true);
+				btnCheckIn.setVisible(true);
+				//backgroundLabel.setVisible(true);
+			}
+		});
 		mnClerk.add(mntmProcessAReturn);
 
 		JMenuItem mntmCheckOverdueItems = new JMenuItem("Check overdue items");
-		// TODO TEST AND GUI
+		mntmCheckOverdueItems.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ca.listOverdue();
+			}
+		});
 		mnClerk.add(mntmCheckOverdueItems);
 
 		JMenu mnBorrower = new JMenu("Borrower");
 		menuBar.add(mnBorrower);
 
 		JMenuItem mntmSearch = new JMenuItem("Search");
-		//		mntmSearch.addActionListener(new ActionListener() {
-		//			public void actionPerformed(ActionEvent arg0) {
-		//				Library lib = new Library();
-		//				lib.borrowerActions(BORROWER_ACTIONS.SEARCH_BOOKS);
-		//			}
-		//		});
 		mnBorrower.add(mntmSearch);
 
 		JMenuItem mntmCheckAccount = new JMenuItem("Check account");
@@ -569,71 +621,32 @@ public class MainPanel extends JFrame {
 
 
 		// Sets Background -- MUST BE LAST to be background
-		JLabel lblNewLabel = new JLabel(new ImageIcon(ImageIO.read(new File("Images/library1.jpg"))));
-		lblNewLabel.setBounds(-2, -9, 502, 350);
-		contentPane.add(lblNewLabel);
+		backgroundLabel = new JLabel(new ImageIcon(ImageIO.read(new File("Images/library1.jpg"))));
+		backgroundLabel.setBounds(-2, -9, 502, 350);
+		contentPane.add(backgroundLabel);
 
 
 		// Changing window visibilities for functions
 		/* Change window for Search */
 		mntmSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (borrowerIDField.isVisible() && btnSubmit.isVisible() && lblEnterTheBorrower.isVisible())
-				{
-					borrowerIDField.setVisible(false);
-					btnSubmit.setVisible(false);
-					lblEnterTheBorrower.setVisible(false);
-				}
-				if (lblBorrowerId.isVisible() && lblCallNumber.isVisible() && textField.isVisible()&&textField_1.isVisible()&hold.isVisible())
-				{
-					lblBorrowerId.setVisible(false);
-					lblCallNumber.setVisible(false);
-					textField.setVisible(false);
-					textField_1.setVisible(false);
-					hold.setVisible(false);
-				}
-				if (lblEnterTheFid.isVisible()&&pay.isVisible()&&payFine.isVisible()){
-					lblEnterTheFid.setVisible(false);
-					pay.setVisible(false);
-					payFine.setVisible(false);
-				}
-				lblWelcome.setVisible(false);
-				comboBox_1.setVisible(false);
+				hideAll();
 				searchField.setVisible(true);
 				btnSearch.setVisible(true);
-
-				comboBox.setVisible(true);		
+				comboBox.setVisible(true);	
+				backgroundLabel.setVisible(true);
 			}
 		});
 
 		//Check account
 		mntmCheckAccount.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				lblWelcome.setVisible(false);
-
-				if (searchField.isVisible())
-					searchField.setVisible(false);
-				if (btnSearch.isVisible())
-					btnSearch.setVisible(false);
-				if (comboBox.isVisible())
-					comboBox.setVisible(false);
-				if (lblBorrowerId.isVisible() && lblCallNumber.isVisible() && textField.isVisible()&&textField_1.isVisible()&hold.isVisible())
-				{
-					lblBorrowerId.setVisible(false);
-					lblCallNumber.setVisible(false);
-					textField.setVisible(false);
-					textField_1.setVisible(false);
-					hold.setVisible(false);
-				}
-				if (lblEnterTheFid.isVisible()&&pay.isVisible()&&payFine.isVisible()){
-					lblEnterTheFid.setVisible(false);
-					pay.setVisible(false);
-					payFine.setVisible(false);
-				}
+				hideAll();
 				comboBox_1.setVisible(true);
 				lblEnterTheBorrower.setVisible(true);
 				btnSubmit.setVisible(true);
 				borrowerIDField.setVisible(true);
+				backgroundLabel.setVisible(true);
 			}
 		});
 
@@ -656,36 +669,14 @@ public class MainPanel extends JFrame {
 		//Place a hold
 		mntmPlaceAHold.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				//Add shit
-				lblWelcome.setVisible(false);
-				comboBox_1.setVisible(false);
-
-				if (searchField.isVisible())
-					searchField.setVisible(false);
-				if (btnSearch.isVisible())
-					btnSearch.setVisible(false);
-				if (comboBox.isVisible())
-					comboBox.setVisible(false);
-				if (borrowerIDField.isVisible() && btnSubmit.isVisible() && lblEnterTheBorrower.isVisible())
-				{
-					borrowerIDField.setVisible(false);
-					btnSubmit.setVisible(false);
-					lblEnterTheBorrower.setVisible(false);
-				}
-				if (lblEnterTheFid.isVisible()&&pay.isVisible()&&payFine.isVisible()){
-					lblEnterTheFid.setVisible(false);
-					pay.setVisible(false);
-					payFine.setVisible(false);
-				}
+				hideAll();
 				lblBorrowerId.setVisible(true);
 				lblCallNumber.setVisible(true);
 				textField.setVisible(true);
 				textField_1.setVisible(true);
 				hold.setVisible(true);
-
-
-
+				backgroundLabel.setVisible(true);
 			}
 		});
 
@@ -714,37 +705,11 @@ public class MainPanel extends JFrame {
 		//On click menu item pay a Fine
 		mntmPayAFine.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				comboBox_1.setVisible(false);
-
-				if(lblWelcome.isVisible())
-					lblWelcome.setVisible(false);
-
-				if (borrowerIDField.isVisible() && btnSubmit.isVisible() && lblEnterTheBorrower.isVisible())
-				{
-					borrowerIDField.setVisible(false);
-					btnSubmit.setVisible(false);
-					lblEnterTheBorrower.setVisible(false);
-				}
-				if (lblBorrowerId.isVisible() && lblCallNumber.isVisible() && textField.isVisible()&&textField_1.isVisible()&hold.isVisible())
-				{
-					lblBorrowerId.setVisible(false);
-					lblCallNumber.setVisible(false);
-					textField.setVisible(false);
-					textField_1.setVisible(false);
-					hold.setVisible(false);
-				}
-				if (searchField.isVisible())
-					searchField.setVisible(false);
-				if (btnSearch.isVisible())
-					btnSearch.setVisible(false);
-				if (comboBox.isVisible())
-					comboBox.setVisible(false);
-
+				hideAll();
 				lblEnterTheFid.setVisible(true);
 				payFine.setVisible(true);
 				pay.setVisible(true);
-
-
+				backgroundLabel.setVisible(true);
 			}
 		});
 
@@ -806,8 +771,188 @@ public class MainPanel extends JFrame {
 				GMPYear.setVisible(true);
 			}
 		});
+		lblBorrId.setVisible(false);
+		
+		// CLERK ACTIONS STUFF
 
-
+		lblBorrId.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblBorrId.setBounds(27, 31, 76, 14);
+		contentPane.add(lblBorrId);
+		borIDField.setVisible(false);
+		
+		borIDField.setBounds(115, 27, 116, 22);
+		borIDField.setColumns(10);
+		contentPane.add(borIDField);
+		lblPassword.setVisible(false);
+		
+		lblPassword.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblPassword.setBounds(244, 75, 76, 16);
+		contentPane.add(lblPassword);
+		passwordField.setVisible(false);
+		
+		passwordField.setBounds(332, 71, 116, 20);
+		contentPane.add(passwordField);
+		lblUsername.setVisible(false);
+		
+		lblUsername.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblUsername.setBounds(27, 75, 76, 16);
+		contentPane.add(lblUsername);
+		lblEmail.setVisible(false);
+		
+		lblEmail.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblEmail.setBounds(27, 145, 76, 16);
+		contentPane.add(lblEmail);
+		lblSin.setVisible(false);
+		
+		lblSin.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblSin.setBounds(244, 145, 76, 16);
+		contentPane.add(lblSin);
+		
+		emailField = new JTextField();
+		emailField.setVisible(false);
+		emailField.setBounds(116, 139, 116, 22);
+		contentPane.add(emailField);
+		emailField.setColumns(10);
+		
+		sinField = new JTextField();
+		sinField.setVisible(false);
+		sinField.setBounds(332, 139, 116, 22);
+		contentPane.add(sinField);
+		sinField.setColumns(10);
+		
+		lblExpiryDate = new JLabel("Expiry Date:");
+		lblExpiryDate.setVisible(false);
+		lblExpiryDate.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblExpiryDate.setBounds(27, 178, 76, 16);
+		contentPane.add(lblExpiryDate);
+		
+		usernameField = new JTextField();
+		usernameField.setVisible(false);
+		usernameField.setBounds(116, 69, 116, 22);
+		contentPane.add(usernameField);
+		usernameField.setColumns(10);
+		spinner.setVisible(false);
+		spinner.setModel(new SpinnerDateModel(new Date(1364799600000L), null, null, Calendar.DAY_OF_YEAR));
+		JSpinner.DateEditor de = new JSpinner.DateEditor(spinner, "dd/MM/yyyy");
+		spinner.setEditor(de);
+		spinner.setBounds(116, 174, 116, 20);
+		
+		contentPane.add(spinner);
+		
+		lblUserType = new JLabel("User Type:");
+		lblUserType.setVisible(false);
+		lblUserType.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblUserType.setBounds(244, 178, 76, 16);
+		contentPane.add(lblUserType);
+		
+		userTypeComboBox = new JComboBox<String>();
+		userTypeComboBox.setVisible(false);
+		userTypeComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Student", "Faculty", "Staff"}));
+		userTypeComboBox.setBounds(332, 172, 116, 22);
+		contentPane.add(userTypeComboBox);
+		btnAddUser.setVisible(false);
+		btnAddUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ca.addBorrower(borIDField.getText(), passwordField.getText(), usernameField.getText(), addressField.getText(), phoneField.getText(), emailField.getText(), sinField.getText(), (Date) spinner.getValue(), (String) userTypeComboBox.getSelectedItem());
+			}
+		});
+		btnAddUser.setBounds(376, 254, 95, 25);
+		
+		contentPane.add(btnAddUser);
+		
+		lblPhone = new JLabel("Phone:");
+		lblPhone.setVisible(false);
+		lblPhone.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblPhone.setBounds(244, 110, 76, 14);
+		contentPane.add(lblPhone);
+		
+		phoneField = new JTextField();
+		phoneField.setVisible(false);
+		phoneField.setBounds(332, 104, 116, 20);
+		contentPane.add(phoneField);
+		phoneField.setColumns(10);
+		
+		lblAddress = new JLabel("Address:");
+		lblAddress.setVisible(false);
+		lblAddress.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblAddress.setBounds(27, 110, 76, 14);
+		contentPane.add(lblAddress);
+		
+		addressField = new JTextField();
+		addressField.setVisible(false);
+		addressField.setBounds(116, 104, 116, 20);
+		contentPane.add(addressField);
+		addressField.setColumns(10);
+		
+		// stuff for check out
+		
+		lblBorID2 = new JLabel("Card ID:");
+		lblBorID2.setVisible(false);
+		lblBorID2.setBounds(12, 13, 46, 14);
+		contentPane.add(lblBorID2);
+		
+		borIDField2 = new JTextField();
+		borIDField2.setVisible(false);
+		borIDField2.setBounds(115, 11, 86, 20);
+		contentPane.add(borIDField2);
+		borIDField2.setColumns(10);
+		
+		lblCallNumbers = new JLabel("Call Numbers:");
+		lblCallNumbers.setBounds(12, 40, 95, 14);
+		contentPane.add(lblCallNumbers);
+		callNumbersField.setVisible(false);
+		callNumbersField.setBounds(115, 40, 356, 206);
+		
+		contentPane.add(callNumbersField);
+		
+		btnCheckOut = new JButton("Check Out");
+		btnCheckOut.setVisible(false);
+		btnCheckOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ca.checkOut(borIDField2.getText(), callNumbersField.getText().split("\n"));
+			}
+		});
+		btnCheckOut.setBounds(376, 260, 95, 25);
+		contentPane.add(btnCheckOut);
+		
+		lblOnePerLine = new JLabel("(One Per Line)");
+		lblOnePerLine.setVisible(false);
+		lblOnePerLine.setBounds(12, 55, 95, 14);
+		contentPane.add(lblOnePerLine);
+		
+		// stuff for check in
+		
+		lblCallNumbers2 = new JLabel("Call Number:");
+		lblCallNumbers2.setVisible(false);
+		lblCallNumbers2.setBounds(105, 54, 86, 14);
+		contentPane.add(lblCallNumbers2);
+		
+		callNumberField = new JTextField();
+		callNumberField.setVisible(false);
+		callNumberField.setBounds(203, 48, 171, 20);
+		contentPane.add(callNumberField);
+		callNumberField.setColumns(10);
+		
+		lblCopyNumber = new JLabel("Copy Number:");
+		lblCopyNumber.setVisible(false);
+		lblCopyNumber.setBounds(105, 84, 86, 14);
+		contentPane.add(lblCopyNumber);
+		
+		copyNumberField = new JTextField();
+		copyNumberField.setVisible(false);
+		copyNumberField.setBounds(203, 78, 171, 20);
+		contentPane.add(copyNumberField);
+		copyNumberField.setColumns(10);
+		
+		btnCheckIn = new JButton("Check In");
+		btnCheckIn.setVisible(false);
+		btnCheckIn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ca.checkIn(callNumberField.getText(), copyNumberField.getText());
+			}
+		});
+		btnCheckIn.setBounds(203, 137, 95, 25);
+		contentPane.add(btnCheckIn);
 	}
 
 	private void setAddBookVisible(boolean b){
@@ -828,5 +973,12 @@ public class MainPanel extends JFrame {
 			AddBookpublisher.setVisible(false);
 			AddBookyear.setVisible(false);
 		}
+	}
+	
+	private void hideAll() {
+		for (Component c : contentPane.getComponents()) {
+			c.setVisible(false);
+		}
+		//backgroundLabel.setVisible(true);
 	}
 }
