@@ -620,6 +620,13 @@ public class MainPanel extends JFrame {
 				BorrowerActions bact = new BorrowerActions(con);
 				String dropDownItem = (String)comboBox_1.getSelectedItem();
 				bact.checkAccount(borrowerIDField.getText(), dropDownItem);
+				
+				lblWelcome.setVisible(true);
+
+				comboBox_1.setVisible(false);
+				lblEnterTheBorrower.setVisible(false);
+				btnSubmit.setVisible(false);
+				borrowerIDField.setVisible(false);
 			}
 		});
 
@@ -671,6 +678,13 @@ public class MainPanel extends JFrame {
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
+				lblWelcome.setVisible(true);
+
+				lblBorrowerId.setVisible(false);
+				lblCallNumber.setVisible(false);
+				textField.setVisible(false);
+				textField_1.setVisible(false);
+				hold.setVisible(false);
 			}
 		});
 
@@ -722,6 +736,11 @@ public class MainPanel extends JFrame {
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
+				lblWelcome.setVisible(true);
+
+				lblEnterTheFid.setVisible(false);
+				payFine.setVisible(false);
+				pay.setVisible(false);
 			}
 		});
 		// comboBox.setVisible(true); TODO Check position of this combobox
