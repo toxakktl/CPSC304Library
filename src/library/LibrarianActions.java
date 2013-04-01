@@ -195,29 +195,23 @@ public class LibrarianActions extends UserActions {
 		String justYear = new Integer(yDigit).toString();
 		String nRows = new Integer(n).toString();
 		try{
-			// Creates a View of CallNumber, count called top
+			// Creates a View of CallNumber, count
 			String getTopString =
-					"CREATE OR REPLACE VIEW top AS " +
 							"SELECT * FROM " +
+							"(SELECT * FROM " +
 							"(SELECT callNumber, count(callNumber) as count " +
-							"FROM (SELECT * FROM Borrowing WHERE outdate LIKE '?%')" +
+							"FROM " +
+							"(SELECT * FROM Borrowing WHERE outdate LIKE '%-' || ?) " + // DATE is actually MM-DD-YY
 							"GROUP BY callNumber) " +
-							"WHERE rownum <= ? " +
-							"ORDER BY count DESC; ";
+							"ORDER BY count DESC) " +
+							"WHERE ROWNUM <= ?";
 			getTop = con.prepareStatement(getTopString);
 
 			getTop.setString(2, nRows);
 			getTop.setString(1, justYear);
 			getTop.executeUpdate(); // update database
 
-			// Joins View TOP with table BOOK and grabs titles and counts
-			String getTitleString = 
-					"SELECT title, count " +
-							"FROM book JOIN top " +
-							"ON book.callNumber = top.callNumber;";
-			getTitle = con.prepareStatement(getTitleString);
-
-			ResultSet resultSearch = getTitle.executeQuery(); // update database
+			ResultSet resultSearch = getTop.executeQuery(); // update database
 			ResultSetMetaData rsmd = resultSearch.getMetaData();
 
 
@@ -256,7 +250,6 @@ public class LibrarianActions extends UserActions {
 			// commit work
 			con.commit();
 			getTop.close();
-			getTitle.close();
 
 		} catch (SQLException ex) {
 			System.out.println("Message: " + ex.getMessage());

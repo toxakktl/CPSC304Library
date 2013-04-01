@@ -484,6 +484,10 @@ public class MainPanel extends JFrame {
 		btnGMP.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// TODO implement getMostPopular()
+				LibrarianActions la = new LibrarianActions(con);
+				int n = Integer.parseInt(GMPNum.getText());
+				int y = Integer.parseInt(GMPYear.getText());
+				la.generateMostPopularReport(n, y);
 				lblWelcome.setVisible(true);
 				lblBookBack.setVisible(false);
 				btnGMP.setVisible(false);
