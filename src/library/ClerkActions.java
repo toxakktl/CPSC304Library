@@ -39,7 +39,7 @@ public class ClerkActions extends UserActions {
 			ps.executeUpdate();
 			con.commit();
 			ps.close();
-
+			JOptionPane.showMessageDialog(null, "A borrower was added!", "Information", JOptionPane.INFORMATION_MESSAGE);
 		} catch (SQLException ex) {
 			JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			try {
@@ -87,15 +87,16 @@ public class ClerkActions extends UserActions {
 							System.out.println("Borrower successfully checked out a book he placed on hold");
 							break;
 						} else {
-							System.out.println("Borrower " + bid + " is trying to borrow a held book with call number " + callNumber + " without placing a hold first. Skipping...");
+							System.out.println("Borrower " + bid + " is trying to borrow a held book with call number " + callNumber + " without placing a hold first. Skipping this copy.");
 							continue;
 						}
 					} else if (status.equals("out")) {
-						System.out.println("Book with call number " + callNumber + " already has all copies out. Skipping...");
+						System.out.println("Book with call number " + callNumber + " already has all copies out. Skipping this copy.");
 						continue;
 					}
 				}
 				if (copyNo == null) {
+					JOptionPane.showMessageDialog(null, "The book with call number '" + callNumber + "' already has all copies checked out or placed on hold. Skipping...", "Information", JOptionPane.INFORMATION_MESSAGE);
 					continue;
 				}
 				PreparedStatement checkOut = con.prepareStatement("UPDATE BookCopy SET status = 'out' WHERE callNumber = '" + callNumber + "' AND copyNo = '" + copyNo + "'");
@@ -114,7 +115,7 @@ public class ClerkActions extends UserActions {
 				con.commit();
 				ps.close();
 				if (receipt == null)
-					receipt = "Items checked out:\n";
+					receipt = "Call numbers checked out:\n";
 				receipt += callNumber + "\n";
 			}
 			// print a note with the items and their due date
@@ -178,7 +179,7 @@ public class ClerkActions extends UserActions {
 			upDateBorrowing.executeUpdate();
 			con.commit();
 			upDateBorrowing.close();
-
+			JOptionPane.showMessageDialog(null, "A book was checked in!", "Information", JOptionPane.INFORMATION_MESSAGE);
 		} catch (SQLException ex) {
 			JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			try {
