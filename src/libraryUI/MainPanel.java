@@ -25,6 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JSpinner;
@@ -673,15 +674,12 @@ public class MainPanel extends JFrame {
 		//on click place a hold request
 		hold.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				try {
 					BorrowerActions baH = new BorrowerActions(con);
 					baH.placeHold(Integer.parseInt(textField_1.getText()), textField.getText());
-				} catch (NumberFormatException e1) {
-					e1.printStackTrace();
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
+				} catch (NumberFormatException ex) {
+					JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				} 
 				lblWelcome.setVisible(true);
 
 				lblBorrowerId.setVisible(false);
@@ -709,10 +707,8 @@ public class MainPanel extends JFrame {
 				try {
 					BorrowerActions baP = new BorrowerActions(con);
 					baP.payFines(Integer.parseInt(payFine.getText()));
-				} catch (NumberFormatException e1) {
-					e1.printStackTrace();
-				} catch (SQLException e1) {
-					e1.printStackTrace();
+				} catch (NumberFormatException ex) {
+					JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				lblWelcome.setVisible(true);
 

@@ -10,27 +10,27 @@ import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 
-public class BorrowerActions {
+public class BorrowerActions extends UserActions {
 
 	//Fields for Borrower
-	Connection con;
 	Vector columnNames = new Vector();
 	Vector data = new Vector();
 	JPanel panel = new JPanel();
 	JTable table;
 
 	public BorrowerActions(Connection c) {
-		con = c;
+		super(c);
 	}
 
 	public void searchBooks(String searchField, String dropdown) {
 		Statement stm;
-		try{
+		try {
 			stm = con.createStatement();
 			if (dropdown.equals("Title")){
 
@@ -72,7 +72,7 @@ public class BorrowerActions {
 				frame.setVisible(true);
 
 
-			}else if (dropdown.equals("Author")){
+			} else if (dropdown.equals("Author")){
 				//TODO Later chnage the query to Book, authors
 				ResultSet resultSearch = stm.executeQuery("SELECT * FROM Book WHERE mainAuthor = '" + searchField + "'");
 				ResultSetMetaData rsmd = resultSearch.getMetaData();
@@ -106,7 +106,7 @@ public class BorrowerActions {
 				frame.add(panel);         //adding panel to the frame
 				frame.setSize(460, 450); //setting frame size
 				frame.setVisible(true);
-			}else{
+			} else{
 				//TODO Later replace query to Book, and subject	
 				String sub = "SELECT hs.callNumber FROM HasSubject hs WHERE subject = '" +searchField+ "'";
 				ResultSet resultSearch = stm.executeQuery("SELECT b.callNumber, b.isbn, b.title, b.mainAuthor, b.publisher, b.year " +
@@ -146,8 +146,8 @@ public class BorrowerActions {
 				frame.setVisible(true);
 			}
 
-		}catch (SQLException ex){
-			System.out.println("The SQL Exception has occured:" + ex);
+		} catch (SQLException ex){
+			JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -188,9 +188,7 @@ public class BorrowerActions {
 			ResultSet holdRequests = stmH.executeQuery(holdR);
 			ResultSetMetaData rsmdH = holdRequests.getMetaData();
 
-
 			if (ddi.equals("Not returned")){
-
 				int numCols = rsmdB.getColumnCount();
 				for (int i = 0; i < numCols; i++) {
 					// get column name and print it
@@ -221,8 +219,7 @@ public class BorrowerActions {
 				frame.add(panel);         //adding panel to the frame
 				frame.setSize(460, 450); //setting frame size
 				frame.setVisible(true);
-			}
-			else if (ddi.equals("Fines")){
+			} else if (ddi.equals("Fines")){
 				int numCols = rsmdF.getColumnCount();
 				for (int i = 0; i < numCols; i++) {
 					// get column name and print it
@@ -253,7 +250,7 @@ public class BorrowerActions {
 				frame.add(panel);         //adding panel to the frame
 				frame.setSize(460, 450); //setting frame size
 				frame.setVisible(true);
-			}else if (ddi.equals("Hold requests")){
+			} else if (ddi.equals("Hold requests")){
 				int numCols = rsmdH.getColumnCount();
 				for (int i = 0; i < numCols; i++) {
 					// get column name and print it
@@ -285,13 +282,9 @@ public class BorrowerActions {
 				frame.setSize(460, 450); //setting frame size
 				frame.setVisible(true);
 			}
-
-			//	        stmB.close();
-			//			stmF.close();
-			//			stmH.close();
+			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}	
 	}
 
@@ -300,20 +293,75 @@ public class BorrowerActions {
 	 * to the borrower and informs the library clerk to keep the book out of the shelves.
 	 * @throws SQLException 
 	 */
-	public void placeHold(int bid, String callNumber) throws SQLException {
+	public void placeHold(int bid, String callNumber) {
+		try {
+			Statement stm = con.createStatement();
+			String str = "SELECT bc.callNumber, bc.status FROM BookCopy bc WHERE bc.callNumber = '" + callNumber + "' AND bc.status = 'in'";
+			ResultSet rs = stm.executeQuery(str);
+			if (!rs.next()){
 
-		Statement stm = con.createStatement();
-		String str = "SELECT bc.callNumber, bc.status FROM BookCopy bc WHERE bc.callNumber = '" + callNumber + "' AND bc.status = 'in'";
-		ResultSet rs = stm.executeQuery(str);
-		if (!rs.next()){
+				PreparedStatement ps = con.prepareStatement("INSERT INTO HoldRequest VALUES (hid_counter.nextval,"+bid+", '"+callNumber+"', sysdate)");
+				ps.executeUpdate();
+				con.commit();	
+				ps.close();
 
-			PreparedStatement ps = con.prepareStatement("INSERT INTO HoldRequest VALUES (hid_counter.nextval,"+bid+", '"+callNumber+"', sysdate)");
+				Statement stm1  = con.createStatement();
+				ResultSet result = stm1.executeQuery("SELECT * FROM HoldRequest");
+				ResultSetMetaData rsmd = result.getMetaData();
+
+				int numCols = rsmd.getColumnCount();
+				for (int i = 0; i < numCols; i++) {
+					// get column name and print it
+					columnNames.addElement(rsmd.getColumnName(i+1));
+					System.out.printf("%-15s", rsmd.getColumnName(i + 1));
+				}
+
+				while (result.next()) {
+					Vector row = new Vector(numCols);
+					for (int i = 1; i <= numCols; i++) {
+						row.addElement(result.getObject(i));
+					}
+					data.addElement(row);
+				}
+
+				result.close();
+				stm1.close();
+				//New JFrame window for result table 
+				table = new JTable(data, columnNames);			
+				TableColumn column;
+				for (int i = 0; i < table.getColumnCount(); i++) {
+					column = table.getColumnModel().getColumn(i);
+					column.setMaxWidth(250);
+				}
+				JScrollPane scrollPane = new JScrollPane(table);
+				panel.add(scrollPane);               
+				JFrame frame = new JFrame();
+				frame.add(panel);         //adding panel to the frame
+				frame.setSize(460, 450); //setting frame size
+				frame.setVisible(true);
+
+			}
+			else {
+				JOptionPane.showMessageDialog(null,"The item is available, you do not need to place a hold", "Information", JOptionPane.INFORMATION_MESSAGE);
+			} 
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+
+	/**Pay a fine.
+	 * @throws SQLException */
+	public void payFines(int fid) {
+		try {
+			//Update the paidDate
+			PreparedStatement ps = con.prepareStatement("UPDATE Fine SET paidDate=sysdate WHERE fid=" + fid);
 			ps.executeUpdate();
-			con.commit();	
+			con.commit();
 			ps.close();
 
 			Statement stm1  = con.createStatement();
-			ResultSet result = stm1.executeQuery("SELECT * FROM HoldRequest");
+			ResultSet result = stm1.executeQuery("SELECT * FROM Fine");
 			ResultSetMetaData rsmd = result.getMetaData();
 
 			int numCols = rsmd.getColumnCount();
@@ -346,58 +394,8 @@ public class BorrowerActions {
 			frame.add(panel);         //adding panel to the frame
 			frame.setSize(460, 450); //setting frame size
 			frame.setVisible(true);
-
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		else
-			System.out.println("The item is available, you do not need to place a hold");
-	}
-
-
-	/**Pay a fine.
-	 * @throws SQLException */
-	public void payFines(int fid) throws SQLException {
-		//Update the paidDate
-		PreparedStatement ps = con.prepareStatement("UPDATE Fine SET paidDate=sysdate WHERE fid=" + fid);
-		ps.executeUpdate();
-		con.commit();
-		ps.close();
-
-		Statement stm1  = con.createStatement();
-		ResultSet result = stm1.executeQuery("SELECT * FROM Fine");
-		ResultSetMetaData rsmd = result.getMetaData();
-
-		int numCols = rsmd.getColumnCount();
-		for (int i = 0; i < numCols; i++) {
-			// get column name and print it
-			columnNames.addElement(rsmd.getColumnName(i+1));
-			System.out.printf("%-15s", rsmd.getColumnName(i + 1));
-		}
-
-		while (result.next()) {
-			Vector row = new Vector(numCols);
-			for (int i = 1; i <= numCols; i++) {
-				row.addElement(result.getObject(i));
-			}
-			data.addElement(row);
-		}
-
-		result.close();
-		stm1.close();
-		//New JFrame window for result table 
-		table = new JTable(data, columnNames);			
-		TableColumn column;
-		for (int i = 0; i < table.getColumnCount(); i++) {
-			column = table.getColumnModel().getColumn(i);
-			column.setMaxWidth(250);
-		}
-		JScrollPane scrollPane = new JScrollPane(table);
-		panel.add(scrollPane);               
-		JFrame frame = new JFrame();
-		frame.add(panel);         //adding panel to the frame
-		frame.setSize(460, 450); //setting frame size
-		frame.setVisible(true);
 	}
 }
-
-
-

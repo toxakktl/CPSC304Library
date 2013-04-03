@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -54,7 +55,7 @@ public class LibrarianActions extends UserActions {
 			ps.close();
 
 		} catch (SQLException ex) {
-			System.out.println("Message: " + ex.getMessage());
+			JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			try {
 				// undo the insert
 				con.rollback();
@@ -90,7 +91,7 @@ public class LibrarianActions extends UserActions {
 			ps.close();
 
 		} catch (SQLException ex) {
-			System.out.println("Message: " + ex.getMessage());
+			JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			try {
 				// undo the insert
 				con.rollback();
@@ -161,7 +162,7 @@ public class LibrarianActions extends UserActions {
 			ps.close();
 
 		} catch (SQLException ex) {
-			System.out.println("Message: " + ex.getMessage());
+			JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			try {
 				// undo the insert
 				con.rollback();
@@ -233,7 +234,6 @@ public class LibrarianActions extends UserActions {
 
 			}
 
-
 			resultSearch.close();
 			JTable table = new JTable(data, columnNames);
 			TableColumn column;
@@ -253,7 +253,7 @@ public class LibrarianActions extends UserActions {
 			getTop.close();
 
 		} catch (SQLException ex) {
-			System.out.println("Message: " + ex.getMessage());
+			JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			try {
 				// undo the insert
 				con.rollback();
@@ -340,7 +340,7 @@ public class LibrarianActions extends UserActions {
 			ps.close();
 
 		} catch (SQLException ex) {
-			System.out.println("Message: " + ex.getMessage());
+			JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			try {
 				// undo the insert
 				con.rollback();
@@ -358,11 +358,9 @@ public class LibrarianActions extends UserActions {
 										"from Borrower " +
 										"ORDER BY bid");
 
-
 			// produce view
 			ResultSet resultSearch = ps.executeQuery();
 			ResultSetMetaData rsmd = ps.getMetaData();
-
 
 			// create table panel
 			int numCols = rsmd.getColumnCount();
@@ -380,7 +378,6 @@ public class LibrarianActions extends UserActions {
 				data.addElement(row);
 
 			}
-
 
 			resultSearch.close();
 			JTable table = new JTable(data, columnNames);
@@ -401,7 +398,7 @@ public class LibrarianActions extends UserActions {
 			ps.close();
 
 		} catch (SQLException ex) {
-			System.out.println("Message: " + ex.getMessage());
+			JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			try {
 				// undo the insert
 				con.rollback();

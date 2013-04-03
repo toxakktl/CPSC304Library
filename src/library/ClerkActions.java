@@ -41,7 +41,7 @@ public class ClerkActions extends UserActions {
 			ps.close();
 
 		} catch (SQLException ex) {
-			System.out.println("Message: " + ex.getMessage());
+			JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			try {
 				// undo the insert
 				con.rollback();
@@ -123,7 +123,7 @@ public class ClerkActions extends UserActions {
 				JOptionPane.showMessageDialog(null, receipt, "Check-out receipt", JOptionPane.INFORMATION_MESSAGE);
 			}
 		} catch (SQLException ex) {
-			System.out.println("Message: " + ex.getMessage());
+			JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			try {
 				// undo the insert
 				con.rollback();
@@ -180,7 +180,7 @@ public class ClerkActions extends UserActions {
 			upDateBorrowing.close();
 
 		} catch (SQLException ex) {
-			System.out.println("Message: " + ex.getMessage());
+			JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			try {
 				// undo the insert
 				con.rollback();
@@ -230,8 +230,8 @@ public class ClerkActions extends UserActions {
 
 			overdueSearch.close();
 			overdueResult.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }
