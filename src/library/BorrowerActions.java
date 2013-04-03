@@ -65,18 +65,79 @@ public class BorrowerActions extends UserActions {
 	public void searchBooks(String searchField, String dropdown) {
 		try {
 			Statement stm = con.createStatement();
+			Statement stm1 = con.createStatement();
+			Statement stm2 = con.createStatement();
 			ResultSet resultSearch = null;
 			if (dropdown.equals("Title")){
-				//TODO Later replace query to Book, and title				
 				resultSearch = stm.executeQuery("SELECT * FROM Book WHERE title = '" + searchField + "'");
+
+				ResultSet in = null;
+				String str1 = "SELECT * FROM Book WHERE title = '" + searchField + "'";
+				in = stm1.executeQuery("SELECT COUNT(*) AS inItems FROM ("+str1+") b, BookCopy bc WHERE b.callNumber = bc.callNumber AND bc.status = 'in'");
+				in.next();
+				int countIn = in.getInt("inItems");
+				
+				ResultSet out = null;
+				String str2 = "SELECT * FROM Book WHERE title = '" + searchField + "'";
+				out = stm2.executeQuery("SELECT COUNT(*) AS outItems FROM ("+str2+") b, BookCopy bc WHERE b.callNumber = bc.callNumber AND bc.status = 'out'");
+				out.next();
+				int countOut = out.getInt("outItems");
+				
+				
+				JOptionPane.showMessageDialog(null, "The number of items 'in': " + countIn + "\nThe number of items 'out': " + countOut);
+				stm1.close();
+				stm2.close();
+				in.close();
+				out.close();
 			} else if (dropdown.equals("Author")){
 				//TODO Later chnage the query to Book, authors
 				resultSearch = stm.executeQuery("SELECT * FROM Book WHERE mainAuthor = '" + searchField + "'");
+				
+				ResultSet in = null;
+				String str1 = "SELECT * FROM Book WHERE mainAuthor = '" + searchField + "'";
+				in = stm1.executeQuery("SELECT COUNT(*) AS inItems FROM ("+str1+") b, BookCopy bc WHERE b.callNumber = bc.callNumber AND bc.status = 'in'");
+				in.next();
+				int countIn = in.getInt("inItems");
+				
+				ResultSet out = null;
+				String str2 = "SELECT * FROM Book WHERE mainAuthor = '" + searchField + "'";
+				out = stm2.executeQuery("SELECT COUNT(*) AS outItems FROM ("+str2+") b, BookCopy bc WHERE b.callNumber = bc.callNumber AND bc.status = 'out'");
+				out.next();
+				int countOut = out.getInt("outItems");
+				
+				
+				JOptionPane.showMessageDialog(null, "The number of items 'in': " + countIn + "\nThe number of items 'out': " + countOut);
+				stm1.close();
+				stm2.close();
+				in.close();
+				out.close();
 			} else {
 				//TODO Later replace query to Book, and subject	
-				String sub = "SELECT hs.callNumber FROM HasSubject hs WHERE subject = '" +searchField+ "'";
-				resultSearch = stm.executeQuery("SELECT b.callNumber, b.isbn, b.title, b.mainAuthor, b.publisher, b.year " +
+				String sub = "SELECT hs.callNumber FROM HasSubject hs WHERE hs.subject = '" +searchField+ "'";
+				resultSearch = stm.executeQuery("SELECT * " +
 						"FROM ("+sub+") sub, Book b WHERE b.callNumber = sub.callNumber");
+				
+				ResultSet in = null;
+				String str1 = "SELECT b.callNumber " +
+						"FROM ("+sub+") sub, Book b WHERE b.callNumber = sub.callNumber";
+				
+				in = stm1.executeQuery("SELECT COUNT(*) AS inItems FROM ("+str1+") s, BookCopy bc WHERE s.callNumber = bc.callNumber AND bc.status = 'in'");
+				in.next();
+				int countIn = in.getInt("inItems");
+				
+				ResultSet out = null;
+				String str2 = "SELECT b.callNumber " +
+						"FROM ("+sub+") sub, Book b WHERE b.callNumber = sub.callNumber";
+				out = stm2.executeQuery("SELECT COUNT(*) AS outItems FROM ("+str2+") b, BookCopy bc WHERE b.callNumber = bc.callNumber AND bc.status = 'out'");
+				out.next();
+				int countOut = out.getInt("outItems");
+				
+				
+				JOptionPane.showMessageDialog(null, "The number of items 'in': " + countIn + "\nThe number of items 'out': " + countOut);
+				stm1.close();
+				stm2.close();
+				in.close();
+				out.close();
 			}
 			displayTable(resultSearch);
 			resultSearch.close();
