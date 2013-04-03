@@ -76,7 +76,7 @@ public class MainPanel extends JFrame {
 	private final JTextField usernameField;
 	private final JTextField phoneField;
 	private final JSpinner spinner = new JSpinner();
-	private final JComboBox<String> userTypeComboBox;
+	private final JComboBox userTypeComboBox;
 	private final JButton btnAddUser = new JButton("Submit");
 
 	private final JLabel lblOnePerLine;
@@ -490,15 +490,7 @@ public class MainPanel extends JFrame {
 				lblWelcome.setVisible(true);
 				backgroundLabel.setVisible(true);
 				
-				lblBookBack.setVisible(false);
-				btnAddBook.setVisible(false);
-				setAddBookVisible(false);
-				lblABCallNumber.setVisible(false);
-				lblIsbn.setVisible(false);
-				lblBookTitle.setVisible(false);
-				lblMainAuthor.setVisible(false);
-				lblPublisher.setVisible(false);
-				lblYearPublished.setVisible(false);
+				
 			}
 		});
 		// END OF ADD BOOK FUNCTIONS (LIBRARIAN)
@@ -846,9 +838,9 @@ public class MainPanel extends JFrame {
 		lblUserType.setBounds(244, 178, 76, 16);
 		contentPane.add(lblUserType);
 
-		userTypeComboBox = new JComboBox<String>();
+		userTypeComboBox = new JComboBox();
 		userTypeComboBox.setVisible(false);
-		userTypeComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Student", "Faculty", "Staff"}));
+		userTypeComboBox.setModel(new DefaultComboBoxModel(new String[] {"Student", "Faculty", "Staff"}));
 		userTypeComboBox.setBounds(332, 172, 116, 22);
 		contentPane.add(userTypeComboBox);
 		btnAddUser.setVisible(false);
