@@ -53,7 +53,8 @@ public class LibrarianActions extends UserActions {
 			// commit work
 			con.commit();
 			ps.close();
-
+			
+			JOptionPane.showMessageDialog(null, "The book was added!", "Information", JOptionPane.PLAIN_MESSAGE);
 		} catch (SQLException ex) {
 			JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			try {
@@ -89,7 +90,7 @@ public class LibrarianActions extends UserActions {
 			// commit work
 			con.commit();
 			ps.close();
-
+			JOptionPane.showMessageDialog(null, "The copy was added!", "Information", JOptionPane.PLAIN_MESSAGE);
 		} catch (SQLException ex) {
 			JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			try {
